@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Interactive Playground - AutoZone Training</title>
+    
+    <!-- Monaco Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs/loader.min.js"></script>
+    
+    <!-- Styles -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .playground-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .playground-header {
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .playground-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .playground-title .logo {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn:hover {
+            background: #1177bb;
+        }
+
+        .btn.secondary {
+            background: #5a5a5a;
+        }
+
+        .btn.secondary:hover {
+            background: #6a6a6a;
+        }
+
+        .btn.success {
+            background: #28a745;
+        }
+
+        .btn.success:hover {
+            background: #218838;
+        }
+
+        .btn.danger {
+            background: #dc3545;
+        }
+
+        .btn.danger:hover {
+            background: #c82333;
+        }
+
+        .language-selector {
+            background: #3c3c3c;
+            border: 1px solid #5a5a5a;
+            color: #d4d4d4;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .playground-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .split-pane {
+            display: flex;
+            width: 100%;
+            height: 100%;
+        }
+
+        .editor-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 300px;
+        }
+
+        .output-pane {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #3e3e42;
+            min-width: 300px;
+        }
+
+        .pane-header {
+            background: #252526;
+            border-bottom: 1px solid #3e3e42;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pane-content {
+            flex: 1;
+            position: relative;
+        }
+
+        #editor-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .output-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .output-tabs {
+            display: flex;
+            background: #2d2d30;
+            border-bottom: 1px solid #3e3e42;
+        }
+
+        .output-tab {
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #cccccc;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .output-tab.active {
+            color: #ffffff;
+            border-bottom-color: #0e639c;
+            background: #1e1e1e;
+        }
+
+        .output-tab:hover {
+            background: #3c3c3c;
+        }
+
+        .output-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: #1e1e1e;
+        }
+
+        .terminal-output {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .exercise-panel {
+            padding: 16px;
+            background: #252526;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .exercise-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #4ECDC4;
+        }
+
+        .exercise-description {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #cccccc;
+            margin-bottom: 12px;
+        }
+
+        .exercise-objectives {
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .exercise-objectives ul {
+            margin-left: 16px;
+        }
+
+        .exercise-objectives li {
+            margin-bottom: 4px;
+            color: #cccccc;
+        }
+
+        .progress-bar {
+            background: #3c3c3c;
+            border-radius: 4px;
+            height: 6px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #4ECDC4, #44A08D);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .status-indicator.connected {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .status-indicator.disconnected {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        .terminal-prompt {
+            color: #4ECDC4;
+            font-weight: 600;
+        }
+
+        .terminal-command {
+            color: #FFE66D;
+        }
+
+        .terminal-output-text {
+            color: #d4d4d4;
+        }
+
+        .terminal-error {
+            color: #f14c4c;
+        }
+
+        .terminal-success {
+            color: #73C991;
+        }
+
+        .hint-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 4px;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 12px;
+        }
+
+        .hint-box .hint-title {
+            color: #ffc107;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .exercise-controls {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .exercise-controls .btn {
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        .resizer {
+            width: 4px;
+            background: #3e3e42;
+            cursor: col-resize;
+            transition: background 0.2s;
+        }
+
+        .resizer:hover {
+            background: #0e639c;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #252526;
+            border: 1px solid #4ECDC4;
+            border-radius: 6px;
+            padding: 12px 16px;
+            max-width: 300px;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            font-size: 12px;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #4ECDC4;
+        }
+
+        .loading-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .loading-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #3c3c3c;
+            border-top: 2px solid #4ECDC4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .command-input {
+            background: #252526;
+            border: 1px solid #3e3e42;
+            color: #d4d4d4;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .command-input:focus {
+            outline: none;
+            border-color: #0e639c;
+        }
+
+        .example-commands {
+            font-size: 11px;
+            color: #888;
+            margin-top: 8px;
+        }
+
+        .example-commands .example {
+            background: #3c3c3c;
+            padding: 4px 6px;
+            border-radius: 3px;
+            margin: 2px;
+            display: inline-block;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .example-commands .example:hover {
+            background: #4a4a4a;
+        }
+
+        @media (max-width: 768px) {
+            .split-pane {
+                flex-direction: column;
+            }
+            
+            .output-pane {
+                border-left: none;
+                border-top: 1px solid #3e3e42;
+            }
+            
+            .toolbar {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="playground-container">
+        <!-- Header -->
+        <div class="playground-header">
+            <div class="playground-title">
+                <div class="logo">🤖</div>
+                <span>Claude Code Interactive Playground</span>
+                <div class="status-indicator connected">
+                    <span>●</span>
+                    <span>Connected</span>
+                </div>
+            </div>
+            
+            <div class="toolbar">
+                <select id="language-selector" class="language-selector">
+                    <option value="bash">Bash</option>
+                    <option value="markdown">Markdown</option>
+                    <option value="javascript">JavaScript</option>
+                </select>
+                
+                <button id="run-btn" class="btn success">
+                    <span>▶</span>
+                    <span>Run</span>
+                </button>
+                
+                <button id="clear-btn" class="btn secondary">
+                    <span>🗑</span>
+                    <span>Clear</span>
+                </button>
+                
+                <button id="reset-btn" class="btn danger">
+                    <span>🔄</span>
+                    <span>Reset</span>
+                </button>
+                
+                <button id="save-btn" class="btn">
+                    <span>💾</span>
+                    <span>Save</span>
+                </button>
+                
+                <button id="theme-btn" class="btn secondary">
+                    <span>🌙</span>
+                    <span>Theme</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="playground-content">
+            <div class="split-pane">
+                <!-- Editor Pane -->
+                <div class="editor-pane">
+                    <div class="pane-header">
+                        <span>💻 Code Editor</span>
+                        <div>
+                            <button id="format-btn" class="btn secondary" style="font-size: 10px; padding: 2px 6px;">Format</button>
+                        </div>
+                    </div>
+                    <div class="pane-content">
+                        <div id="editor-container"></div>
+                    </div>
+                </div>
+
+                <!-- Resizer -->
+                <div class="resizer" id="resizer"></div>
+
+                <!-- Output Pane -->
+                <div class="output-pane">
+                    <div class="pane-header">
+                        <span>📺 Output & Exercises</span>
+                        <div class="loading-indicator" id="loading-indicator" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <span>Processing...</span>
+                        </div>
+                    </div>
+                    
+                    <div class="output-tabs">
+                        <button class="output-tab active" data-tab="terminal">Terminal</button>
+                        <button class="output-tab" data-tab="exercises">Exercises</button>
+                        <button class="output-tab" data-tab="help">Help</button>
+                    </div>
+
+                    <div class="output-content">
+                        <!-- Terminal Tab -->
+                        <div id="terminal-tab" class="tab-content">
+                            <div class="terminal-output" id="terminal-output">
+                                <div class="terminal-success">Welcome to Claude Code Interactive Playground! 🎯</div>
+                                <div class="terminal-output-text">
+This is a simulated environment where you can practice Claude Code commands safely.
+
+Type commands in the editor above and click "Run" to execute them.
+You can also use the command input below for quick commands.
+
+💡 Try these commands to get started:
+• /status - Check your setup
+• /help - See available commands  
+• /init - Initialize project memory
+                                </div>
+                                <br>
+                                <div class="terminal-prompt">claude-playground $ </div>
+                            </div>
+                            
+                            <input type="text" id="command-input" class="command-input" placeholder="Type a command or request..." />
+                            
+                            <div class="example-commands">
+                                <strong>Quick examples:</strong>
+                                <span class="example" data-command="/status">/status</span>
+                                <span class="example" data-command="/help">/help</span>
+                                <span class="example" data-command="/init">/init</span>
+                                <span class="example" data-command="Create a React component">Create a React component</span>
+                            </div>
+                        </div>
+
+                        <!-- Exercises Tab -->
+                        <div id="exercises-tab" class="tab-content" style="display: none;">
+                            <div id="exercise-content">
+                                <div class="exercise-panel">
+                                    <div class="exercise-title">🎯 Interactive Training Exercises</div>
+                                    <div class="exercise-description">
+                                        Learn Claude Code through hands-on exercises designed for AutoZone developers.
+                                        Each exercise builds on the previous one and includes validation and hints.
+                                    </div>
+                                    
+                                    <div class="exercise-controls">
+                                        <button id="start-exercise-btn" class="btn success">Start First Exercise</button>
+                                        <button id="exercise-menu-btn" class="btn">View All Exercises</button>
+                                        <button id="progress-btn" class="btn secondary">View Progress</button>
+                                    </div>
+                                </div>
+                                
+                                <div id="current-exercise" style="display: none;">
+                                    <!-- Current exercise content will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Help Tab -->
+                        <div id="help-tab" class="tab-content" style="display: none;">
+                            <div class="exercise-panel">
+                                <div class="exercise-title">🚀 Playground Help</div>
+                                
+                                <h4 style="color: #4ECDC4; margin: 16px 0 8px 0;">Getting Started</h4>
+                                <ul style="margin-left: 16px; font-size: 12px; line-height: 1.5;">
+                                    <li>Use the code editor to write commands or code</li>
+                                    <li>Click "Run" to execute your code through the Claude Code simulator</li>
+                                    <li>Switch between languages using the dropdown</li>
+                                    <li>Try the interactive exercises to learn systematically</li>
+                                </ul>
+                                
+                                <h4 style="color: #4ECDC4; margin: 16px 0 8px 0;">Toolbar Actions</h4>
+                                <ul style="margin-left: 16px; font-size: 12px; line-height: 1.5;">
+                                    <li><strong>Run (▶):</strong> Execute your code</li>
+                                    <li><strong>Clear (🗑):</strong> Clear the output</li>
+                                    <li><strong>Reset (🔄):</strong> Reset editor and output</li>
+                                    <li><strong>Save (💾):</strong> Save your work locally</li>
+                                    <li><strong>Theme (🌙):</strong> Toggle dark/light theme</li>
+                                    <li><strong>Format:</strong> Format your code</li>
+                                </ul>
+                                
+                                <h4 style="color: #4ECDC4; margin: 16px 0 8px 0;">Exercise System</h4>
+                                <ul style="margin-left: 16px; font-size: 12px; line-height: 1.5;">
+                                    <li>Follow guided exercises with step-by-step validation</li>
+                                    <li>Earn points and badges as you progress</li>
+                                    <li>Use hints when you get stuck</li>
+                                    <li>Track your progress across sessions</li>
+                                </ul>
+                                
+                                <h4 style="color: #4ECDC4; margin: 16px 0 8px 0;">Claude Code Commands</h4>
+                                <div style="background: #2d2d30; padding: 12px; border-radius: 4px; font-family: monospace; font-size: 11px; margin: 8px 0;">
+/help      - Show available commands<br>
+/status    - Check configuration<br>
+/memory    - Manage project memory<br>
+/init      - Initialize CLAUDE.md<br>
+/review    - Review pull requests<br>
+/clear     - Clear conversation<br>
+/cost      - Show usage costs
+                                </div>
+                                
+                                <h4 style="color: #4ECDC4; margin: 16px 0 8px 0;">Tips</h4>
+                                <ul style="margin-left: 16px; font-size: 12px; line-height: 1.5;">
+                                    <li>This is a training simulator - no real changes are made</li>
+                                    <li>Use natural language to describe what you want to accomplish</li>
+                                    <li>Try both commands and conversational requests</li>
+                                    <li>Work through exercises in order for the best learning experience</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="notification-title">Notification</div>
+        <div class="notification-content">Content here</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="monaco-setup.js"></script>
+    <script src="claude-simulator.js"></script>
+    <script src="exercise-engine.js"></script>
+    
+    <script>
+        class ClaudePlayground {
+            constructor() {
+                this.editor = null;
+                this.simulator = null;
+                this.exerciseEngine = null;
+                this.currentTab = 'terminal';
+                
+                this.init();
+            }
+
+            async init() {
+                try {
+                    // Initialize Monaco Editor
+                    await this.initializeEditor();
+                    
+                    // Initialize simulator and exercise engine
+                    this.simulator = new ClaudeCodeSimulator();
+                    await this.simulator.initialize();
+                    
+                    this.exerciseEngine = new ExerciseEngine(this.simulator);
+                    
+                    // Setup event listeners
+                    this.setupEventListeners();
+                    
+                    // Setup resizer
+                    this.setupResizer();
+                    
+                    // Load saved state
+                    this.loadState();
+                    
+                    this.showNotification('Playground Ready', 'Claude Code playground is ready for training!');
+                    
+                } catch (error) {
+                    console.error('Failed to initialize playground:', error);
+                    this.showNotification('Error', 'Failed to initialize playground. Please refresh and try again.', 'error');
+                }
+            }
+
+            async initializeEditor() {
+                // Setup Monaco loader
+                require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.44.0/min/vs' } });
+                
+                return new Promise((resolve, reject) => {
+                    require(['vs/editor/editor.main'], async () => {
+                        try {
+                            const monacoSetup = new MonacoEditorSetup();
+                            this.editor = await monacoSetup.initialize(
+                                document.getElementById('editor-container'),
+                                {
+                                    language: 'bash',
+                                    theme: 'claude-dark',
+                                    value: ''
+                                }
+                            );
+                            
+                            // Setup theme change callback
+                            monacoSetup.onThemeChange = (theme) => {
+                                this.updateThemeUI(theme);
+                            };
+                            
+                            this.monacoSetup = monacoSetup;
+                            resolve();
+                        } catch (error) {
+                            reject(error);
+                        }
+                    });
+                });
+            }
+
+            setupEventListeners() {
+                // Toolbar buttons
+                document.getElementById('run-btn').addEventListener('click', () => this.runCode());
+                document.getElementById('clear-btn').addEventListener('click', () => this.clearOutput());
+                document.getElementById('reset-btn').addEventListener('click', () => this.resetPlayground());
+                document.getElementById('save-btn').addEventListener('click', () => this.saveWork());
+                document.getElementById('theme-btn').addEventListener('click', () => this.toggleTheme());
+                document.getElementById('format-btn').addEventListener('click', () => this.formatCode());
+                
+                // Language selector
+                document.getElementById('language-selector').addEventListener('change', (e) => {
+                    this.changeLanguage(e.target.value);
+                });
+                
+                // Tab switching
+                document.querySelectorAll('.output-tab').forEach(tab => {
+                    tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+                });
+                
+                // Command input
+                const commandInput = document.getElementById('command-input');
+                commandInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.executeCommand(commandInput.value);
+                        commandInput.value = '';
+                    }
+                });
+                
+                // Example commands
+                document.querySelectorAll('.example').forEach(example => {
+                    example.addEventListener('click', () => {
+                        const command = example.dataset.command;
+                        commandInput.value = command;
+                        this.executeCommand(command);
+                        commandInput.value = '';
+                    });
+                });
+                
+                // Exercise controls
+                document.getElementById('start-exercise-btn').addEventListener('click', () => this.startFirstExercise());
+                document.getElementById('exercise-menu-btn').addEventListener('click', () => this.showExerciseMenu());
+                document.getElementById('progress-btn').addEventListener('click', () => this.showProgress());
+                
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey || e.metaKey) {
+                        switch (e.key) {
+                            case 'Enter':
+                                e.preventDefault();
+                                this.runCode();
+                                break;
+                            case 's':
+                                e.preventDefault();
+                                this.saveWork();
+                                break;
+                        }
+                    }
+                });
+            }
+
+            setupResizer() {
+                const resizer = document.getElementById('resizer');
+                const editorPane = document.querySelector('.editor-pane');
+                const outputPane = document.querySelector('.output-pane');
+                
+                let isResizing = false;
+                
+                resizer.addEventListener('mousedown', (e) => {
+                    isResizing = true;
+                    document.addEventListener('mousemove', handleMouseMove);
+                    document.addEventListener('mouseup', handleMouseUp);
+                });
+                
+                function handleMouseMove(e) {
+                    if (!isResizing) return;
+                    
+                    const containerWidth = document.querySelector('.split-pane').clientWidth;
+                    const newEditorWidth = (e.clientX / containerWidth) * 100;
+                    
+                    if (newEditorWidth > 20 && newEditorWidth < 80) {
+                        editorPane.style.flex = `0 0 ${newEditorWidth}%`;
+                        outputPane.style.flex = `0 0 ${100 - newEditorWidth}%`;
+                    }
+                }
+                
+                function handleMouseUp() {
+                    isResizing = false;
+                    document.removeEventListener('mousemove', handleMouseMove);
+                    document.removeEventListener('mouseup', handleMouseUp);
+                }
+            }
+
+            async runCode() {
+                const code = this.editor.getValue().trim();
+                if (!code) {
+                    this.showNotification('No Code', 'Please enter some code to execute.');
+                    return;
+                }
+                
+                this.showLoading(true);
+                
+                try {
+                    const response = await this.simulator.execute(code);
+                    this.appendToTerminal(code, response, 'command');
+                    
+                    // Switch to terminal tab to show output
+                    this.switchTab('terminal');
+                    
+                } catch (error) {
+                    this.appendToTerminal(code, `Error: ${error.message}`, 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            async executeCommand(command) {
+                if (!command.trim()) return;
+                
+                this.showLoading(true);
+                
+                try {
+                    let response;
+                    
+                    // Check if it's an exercise command
+                    if (this.currentTab === 'exercises' && this.exerciseEngine.currentExercise) {
+                        response = await this.exerciseEngine.processExerciseAction(command);
+                        this.updateExerciseDisplay();
+                    } else {
+                        response = await this.simulator.execute(command);
+                    }
+                    
+                    this.appendToTerminal(command, response, 'command');
+                    
+                } catch (error) {
+                    this.appendToTerminal(command, `Error: ${error.message}`, 'error');
+                } finally {
+                    this.showLoading(false);
+                }
+            }
+
+            appendToTerminal(command, response, type = 'command') {
+                const terminal = document.getElementById('terminal-output');
+                
+                // Add command
+                const commandDiv = document.createElement('div');
+                commandDiv.innerHTML = `<span class="terminal-prompt">claude-playground $ </span><span class="terminal-command">${this.escapeHtml(command)}</span>`;
+                terminal.appendChild(commandDiv);
+                
+                // Add response
+                const responseDiv = document.createElement('div');
+                responseDiv.className = type === 'error' ? 'terminal-error' : 'terminal-output-text';
+                responseDiv.innerHTML = this.formatTerminalOutput(response);
+                terminal.appendChild(responseDiv);
+                
+                // Add spacing
+                const spacingDiv = document.createElement('div');
+                spacingDiv.innerHTML = '<br>';
+                terminal.appendChild(spacingDiv);
+                
+                // Scroll to bottom
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            formatTerminalOutput(text) {
+                // Convert markdown-like formatting to HTML
+                return this.escapeHtml(text)
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/`(.*?)`/g, '<code style="background: #3c3c3c; padding: 2px 4px; border-radius: 2px;">$1</code>')
+                    .replace(/^(✅|❌|💡|🎯|📊|🔍|⚠️|🚀)/gm, '<span style="font-size: 14px;">$1</span>')
+                    .replace(/\n/g, '<br>');
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            clearOutput() {
+                const terminal = document.getElementById('terminal-output');
+                terminal.innerHTML = `
+                    <div class="terminal-success">Output cleared</div>
+                    <br>
+                    <div class="terminal-prompt">claude-playground $ </div>
+                `;
+            }
+
+            resetPlayground() {
+                // Reset editor
+                this.editor.setValue('');
+                
+                // Reset output
+                this.clearOutput();
+                
+                // Reset simulator
+                this.simulator = new ClaudeCodeSimulator();
+                this.simulator.initialize();
+                
+                // Reset exercise engine
+                this.exerciseEngine = new ExerciseEngine(this.simulator);
+                
+                this.showNotification('Reset Complete', 'Playground has been reset to initial state.');
+            }
+
+            saveWork() {
+                const state = {
+                    code: this.editor.getValue(),
+                    language: document.getElementById('language-selector').value,
+                    timestamp: new Date().toISOString(),
+                    progress: this.exerciseEngine ? this.exerciseEngine.exportProgress() : null
+                };
+                
+                localStorage.setItem('claude-playground-state', JSON.stringify(state));
+                this.showNotification('Saved', 'Your work has been saved locally.');
+            }
+
+            loadState() {
+                const saved = localStorage.getItem('claude-playground-state');
+                if (saved) {
+                    try {
+                        const state = JSON.parse(saved);
+                        
+                        if (state.code) {
+                            this.editor.setValue(state.code);
+                        }
+                        
+                        if (state.language) {
+                            document.getElementById('language-selector').value = state.language;
+                            this.changeLanguage(state.language);
+                        }
+                        
+                        if (state.progress && this.exerciseEngine) {
+                            this.exerciseEngine.importProgress(state.progress);
+                        }
+                        
+                    } catch (error) {
+                        console.error('Failed to load saved state:', error);
+                    }
+                }
+            }
+
+            changeLanguage(language) {
+                if (this.monacoSetup) {
+                    this.monacoSetup.setLanguage(language);
+                }
+            }
+
+            toggleTheme() {
+                if (this.monacoSetup) {
+                    this.monacoSetup.toggleTheme();
+                }
+            }
+
+            updateThemeUI(theme) {
+                const themeBtn = document.getElementById('theme-btn');
+                const icon = theme === 'claude-dark' ? '🌙' : '☀️';
+                themeBtn.querySelector('span').textContent = icon;
+            }
+
+            formatCode() {
+                if (this.monacoSetup) {
+                    this.monacoSetup.formatWithClaudeStyle(this.editor);
+                }
+            }
+
+            switchTab(tabName) {
+                // Update tab buttons
+                document.querySelectorAll('.output-tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.dataset.tab === tabName);
+                });
+                
+                // Show/hide tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.style.display = content.id === `${tabName}-tab` ? 'block' : 'none';
+                });
+                
+                this.currentTab = tabName;
+            }
+
+            showLoading(show) {
+                const indicator = document.getElementById('loading-indicator');
+                indicator.style.display = show ? 'flex' : 'none';
+            }
+
+            showNotification(title, message, type = 'info') {
+                const notification = document.getElementById('notification');
+                notification.querySelector('.notification-title').textContent = title;
+                notification.querySelector('.notification-content').textContent = message;
+                
+                notification.className = `notification show ${type}`;
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 4000);
+            }
+
+            // Exercise methods
+            async startFirstExercise() {
+                const firstExercise = 'setup-check';
+                const intro = this.exerciseEngine.startExercise(firstExercise);
+                
+                this.switchTab('exercises');
+                this.updateExerciseDisplay(intro);
+            }
+
+            showExerciseMenu() {
+                const menu = this.exerciseEngine.getExerciseMenu();
+                this.switchTab('exercises');
+                this.updateExerciseDisplay(menu);
+            }
+
+            showProgress() {
+                const progress = this.exerciseEngine.getUserProgress();
+                this.switchTab('exercises');
+                this.updateExerciseDisplay(progress);
+            }
+
+            updateExerciseDisplay(content = null) {
+                const exerciseContent = document.getElementById('exercise-content');
+                
+                if (content) {
+                    exerciseContent.innerHTML = `
+                        <div class="exercise-panel">
+                            <div class="terminal-output">${this.formatTerminalOutput(content)}</div>
+                        </div>
+                    `;
+                }
+                
+                // Update current exercise display if active
+                if (this.exerciseEngine.currentExercise) {
+                    const currentExercise = document.getElementById('current-exercise');
+                    const ex = this.exerciseEngine.currentExercise;
+                    const progress = (ex.currentStep / ex.validationSteps.length) * 100;
+                    
+                    currentExercise.style.display = 'block';
+                    currentExercise.innerHTML = `
+                        <div class="exercise-panel">
+                            <div class="exercise-title">${ex.title}</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                            <div class="exercise-description">
+                                Step ${ex.currentStep + 1} of ${ex.validationSteps.length} • ${ex.attemptsCount} attempts • ${ex.hintsUsed} hints used
+                            </div>
+                            <div class="exercise-controls">
+                                <button class="btn secondary" onclick="playground.exerciseEngine.provideHint().then(h => playground.updateExerciseDisplay(h))">Hint</button>
+                                <button class="btn secondary" onclick="playground.exerciseEngine.skipCurrentStep().then(s => playground.updateExerciseDisplay(s))">Skip</button>
+                                <button class="btn danger" onclick="playground.exerciseEngine.restartExercise().then(r => playground.updateExerciseDisplay(r))">Restart</button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('current-exercise').style.display = 'none';
+                }
+            }
+        }
+
+        // Initialize playground when page loads
+        let playground;
+        document.addEventListener('DOMContentLoaded', () => {
+            playground = new ClaudePlayground();
+        });
+
+        // Make playground globally accessible for exercise controls
+        window.playground = playground;
+    </script>
+</body>
+</html>

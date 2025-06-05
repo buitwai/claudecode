@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Progress Dashboard - AutoZone Claude Code Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .dashboard {
+            padding: 2rem;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+        
+        .stat-card.progress { border-left-color: #4CAF50; }
+        .stat-card.time { border-left-color: #2196F3; }
+        .stat-card.achievements { border-left-color: #FF9800; }
+        .stat-card.assessments { border-left-color: #9C27B0; }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-change {
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stat-change.positive { color: #4CAF50; }
+        .stat-change.negative { color: #f44336; }
+        
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+        
+        .learning-path {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .path-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .path-item:hover {
+            background: #f5f5f5;
+        }
+        
+        .path-item.completed {
+            background: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .path-item.current {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .path-item.locked {
+            background: #fafafa;
+            color: #999;
+            border-left: 4px solid #ddd;
+        }
+        
+        .path-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .path-icon.completed {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .path-icon.current {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .path-icon.locked {
+            background: #ddd;
+            color: #999;
+        }
+        
+        .path-content {
+            flex: 1;
+        }
+        
+        .path-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .path-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .path-progress {
+            background: #e0e0e0;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .path-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #66BB6A);
+            transition: width 0.3s ease;
+        }
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .achievement-badge {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .achievement-badge:hover {
+            transform: translateY(-2px);
+        }
+        
+        .achievement-badge.earned {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+        }
+        
+        .achievement-badge.locked {
+            background: #f5f5f5;
+            color: #999;
+        }
+        
+        .achievement-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .achievement-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .achievement-description {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .recent-activity {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .activity-icon.completed {
+            background: #e8f5e8;
+            color: #4CAF50;
+        }
+        
+        .activity-icon.assessment {
+            background: #f3e5f5;
+            color: #9C27B0;
+        }
+        
+        .activity-icon.badge {
+            background: #fff3e0;
+            color: #FF9800;
+        }
+        
+        .activity-content {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .activity-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .progress-ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto;
+        }
+        
+        .progress-ring-circle {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 8;
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-progress {
+            stroke: #4CAF50;
+            stroke-dasharray: 377;
+            stroke-dashoffset: 377;
+            transition: stroke-dashoffset 0.5s ease-in-out;
+        }
+        
+        .progress-ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .quick-actions {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div>
+                    <h1 id="user-name">Welcome back, Developer!</h1>
+                    <p id="last-login">Last active: Today at 2:30 PM</p>
+                </div>
+            </div>
+            <div class="progress-ring">
+                <svg width="120" height="120">
+                    <circle class="progress-ring-circle" cx="60" cy="60" r="54"></circle>
+                    <circle class="progress-ring-circle progress-ring-progress" cx="60" cy="60" r="54" id="overall-progress"></circle>
+                </svg>
+                <div class="progress-ring-text" id="overall-percentage">0%</div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card progress">
+                <div class="stat-value" id="completion-rate">0%</div>
+                <div class="stat-label">Course Completion</div>
+                <div class="stat-change positive" id="completion-change">+5% this week</div>
+            </div>
+            <div class="stat-card time">
+                <div class="stat-value" id="study-time">0h</div>
+                <div class="stat-label">Total Study Time</div>
+                <div class="stat-change positive" id="time-change">+2.5h this week</div>
+            </div>
+            <div class="stat-card achievements">
+                <div class="stat-value" id="badges-earned">0</div>
+                <div class="stat-label">Badges Earned</div>
+                <div class="stat-change positive" id="badges-change">+2 this week</div>
+            </div>
+            <div class="stat-card assessments">
+                <div class="stat-value" id="avg-score">0%</div>
+                <div class="stat-label">Average Score</div>
+                <div class="stat-change positive" id="score-change">+8% improvement</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-line"></i>
+                    Learning Progress Over Time
+                </div>
+                <canvas id="progress-chart" width="400" height="200"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-pie"></i>
+                    Skill Distribution
+                </div>
+                <canvas id="skills-chart" width="200" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="learning-path">
+            <div class="section-title">
+                <i class="fas fa-route"></i>
+                Your Learning Path
+            </div>
+            <div id="learning-path-container">
+                <!-- Learning path items will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="section-title">
+                <i class="fas fa-bolt"></i>
+                Quick Actions
+            </div>
+            <div class="action-buttons">
+                <button class="action-btn" onclick="continueNextModule()">
+                    <i class="fas fa-play"></i>
+                    Continue Learning
+                </button>
+                <button class="action-btn" onclick="takeAssessment()">
+                    <i class="fas fa-clipboard-check"></i>
+                    Take Assessment
+                </button>
+                <button class="action-btn" onclick="viewCertifications()">
+                    <i class="fas fa-certificate"></i>
+                    View Certifications
+                </button>
+                <button class="action-btn" onclick="exportProgress()">
+                    <i class="fas fa-download"></i>
+                    Export Progress
+                </button>
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="section-title">
+            <i class="fas fa-trophy"></i>
+            Recent Achievements
+        </div>
+        <div class="achievements-grid" id="achievements-container">
+            <!-- Achievement badges will be populated by JavaScript -->
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <div class="section-title">
+                <i class="fas fa-clock"></i>
+                Recent Activity
+            </div>
+            <div id="activity-container">
+                <!-- Activity items will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="user-data.js"></script>
+    <script src="analytics-engine.js"></script>
+    <script src="achievements.js"></script>
+    <script>
+        // Dashboard initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+        });
+
+        function initializeDashboard() {
+            loadUserData();
+            updateStats();
+            createProgressChart();
+            createSkillsChart();
+            populateLearningPath();
+            populateAchievements();
+            populateRecentActivity();
+            updateOverallProgress();
+        }
+
+        function loadUserData() {
+            const userData = UserData.getUser();
+            if (userData) {
+                document.getElementById('user-name').textContent = `Welcome back, ${userData.name}!`;
+                document.getElementById('last-login').textContent = `Last active: ${new Date(userData.lastLogin).toLocaleString()}`;
+            }
+        }
+
+        function updateStats() {
+            const analytics = AnalyticsEngine.getOverallStats();
+            
+            document.getElementById('completion-rate').textContent = `${analytics.completionRate}%`;
+            document.getElementById('study-time').textContent = `${analytics.totalStudyTime}h`;
+            document.getElementById('badges-earned').textContent = analytics.badgesEarned;
+            document.getElementById('avg-score').textContent = `${analytics.averageScore}%`;
+            
+            // Update change indicators
+            document.getElementById('completion-change').textContent = `${analytics.weeklyProgress > 0 ? '+' : ''}${analytics.weeklyProgress}% this week`;
+            document.getElementById('time-change').textContent = `+${analytics.weeklyStudyTime}h this week`;
+            document.getElementById('badges-change').textContent = `+${analytics.weeklyBadges} this week`;
+            document.getElementById('score-change').textContent = `${analytics.scoreImprovement > 0 ? '+' : ''}${analytics.scoreImprovement}% improvement`;
+        }
+
+        function createProgressChart() {
+            const ctx = document.getElementById('progress-chart').getContext('2d');
+            const progressData = AnalyticsEngine.getProgressHistory();
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: progressData.labels,
+                    datasets: [{
+                        label: 'Completion %',
+                        data: progressData.completion,
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }, {
+                        label: 'Assessment Scores',
+                        data: progressData.scores,
+                        borderColor: '#2196F3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSkillsChart() {
+            const ctx = document.getElementById('skills-chart').getContext('2d');
+            const skillsData = AnalyticsEngine.getSkillsDistribution();
+            
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: skillsData.labels,
+                    datasets: [{
+                        data: skillsData.values,
+                        backgroundColor: [
+                            '#4CAF50',
+                            '#2196F3',
+                            '#FF9800',
+                            '#9C27B0',
+                            '#F44336',
+                            '#607D8B'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateLearningPath() {
+            const container = document.getElementById('learning-path-container');
+            const pathData = AnalyticsEngine.getLearningPath();
+            
+            container.innerHTML = pathData.map(item => `
+                <div class="path-item ${item.status}">
+                    <div class="path-icon ${item.status}">
+                        <i class="fas ${item.icon}"></i>
+                    </div>
+                    <div class="path-content">
+                        <div class="path-title">${item.title}</div>
+                        <div class="path-description">${item.description}</div>
+                        <div class="path-progress">
+                            <div class="path-progress-fill" style="width: ${item.progress}%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function populateAchievements() {
+            const container = document.getElementById('achievements-container');
+            const achievements = AchievementSystem.getRecentAchievements();
+            
+            container.innerHTML = achievements.map(achievement => `
+                <div class="achievement-badge ${achievement.earned ? 'earned' : 'locked'}">
+                    <div class="achievement-icon">
+                        <i class="fas ${achievement.icon}"></i>
+                    </div>
+                    <div class="achievement-title">${achievement.title}</div>
+                    <div class="achievement-description">${achievement.description}</div>
+                </div>
+            `).join('');
+        }
+
+        function populateRecentActivity() {
+            const container = document.getElementById('activity-container');
+            const activities = AnalyticsEngine.getRecentActivity();
+            
+            container.innerHTML = activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon ${activity.type}">
+                        <i class="fas ${activity.icon}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">${activity.title}</div>
+                        <div class="activity-time">${activity.time}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateOverallProgress() {
+            const progress = AnalyticsEngine.getOverallProgress();
+            const circle = document.getElementById('overall-progress');
+            const text = document.getElementById('overall-percentage');
+            
+            const circumference = 2 * Math.PI * 54;
+            const offset = circumference - (progress / 100) * circumference;
+            
+            circle.style.strokeDashoffset = offset;
+            text.textContent = `${progress}%`;
+        }
+
+        // Quick action functions
+        function continueNextModule() {
+            const nextModule = AnalyticsEngine.getNextRecommendedModule();
+            if (nextModule) {
+                window.location.href = `#${nextModule.id}`;
+                AnalyticsEngine.trackAction('continue_learning', { module: nextModule.id });
+            }
+        }
+
+        function takeAssessment() {
+            window.location.href = 'assessment-system.html';
+            AnalyticsEngine.trackAction('start_assessment');
+        }
+
+        function viewCertifications() {
+            window.location.href = '#certifications';
+            AnalyticsEngine.trackAction('view_certifications');
+        }
+
+        function exportProgress() {
+            const progressData = AnalyticsEngine.exportProgressReport();
+            const blob = new Blob([JSON.stringify(progressData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `claude-code-progress-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            AnalyticsEngine.trackAction('export_progress');
+        }
+
+        // Auto-refresh dashboard every 5 minutes
+        setInterval(() => {
+            updateStats();
+            populateRecentActivity();
+        }, 300000);
+    </script>
+</body>
+</html>

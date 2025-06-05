@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code Sub-Agent Visualizer</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #f97316;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #1e293b;
+            --light-bg: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .visualization-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .visualization-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--success-color));
+        }
+
+        .control-panel {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .scenario-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: white;
+            color: var(--text-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scenario-btn:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.3);
+        }
+
+        .scenario-btn.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .main-agent-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .main-agent {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            box-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .main-agent::after {
+            content: 'Claude Code Main';
+            position: absolute;
+            bottom: -2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .sub-agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+            position: relative;
+        }
+
+        .sub-agent {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .sub-agent.active {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: var(--success-color);
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.2);
+        }
+
+        .sub-agent.working {
+            border-color: var(--warning-color);
+            background: linear-gradient(135deg, #fef3c7, #fbbf24);
+        }
+
+        .sub-agent.completed {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #d1fae5, #10b981);
+        }
+
+        .sub-agent-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary-color), #fb923c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .sub-agent.working .sub-agent-icon {
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .sub-agent-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .sub-agent-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--border-color);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            width: 0%;
+            transition: width 1s ease;
+            border-radius: 3px;
+        }
+
+        .task-list {
+            text-align: left;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-item.completed {
+            color: var(--success-color);
+        }
+
+        .connection-line {
+            position: absolute;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            height: 2px;
+            border-radius: 1px;
+            opacity: 0;
+            transform-origin: left center;
+            animation: drawLine 1s ease forwards;
+        }
+
+        @keyframes drawLine {
+            from { transform: scaleX(0); opacity: 0; }
+            to { transform: scaleX(1); opacity: 1; }
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--dark-bg);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            max-width: 300px;
+            line-height: 1.4;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .demo-btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .demo-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .demo-btn.primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.4);
+        }
+
+        .demo-btn.secondary {
+            background: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .demo-btn.secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 2rem 0;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateX(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .timeline-item.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -1.75rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--border-color);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .visualization-container {
+                padding: 1.5rem;
+            }
+            
+            .sub-agents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 Sub-Agent Visualizer</h1>
+            <p>Watch Claude Code's intelligent sub-agents collaborate to solve complex development challenges</p>
+        </div>
+
+        <div class="control-panel">
+            <button class="scenario-btn active" data-scenario="authentication" onclick="loadScenario('authentication')">
+                <span>🔐</span> Authentication System
+            </button>
+            <button class="scenario-btn" data-scenario="ecommerce" onclick="loadScenario('ecommerce')">
+                <span>🛒</span> E-commerce Platform
+            </button>
+            <button class="scenario-btn" data-scenario="legacy" onclick="loadScenario('legacy')">
+                <span>🔧</span> Legacy Modernization
+            </button>
+            <button class="scenario-btn" data-scenario="api" onclick="loadScenario('api')">
+                <span>🌐</span> API Development
+            </button>
+        </div>
+
+        <div class="visualization-container">
+            <div class="main-agent-container">
+                <div class="main-agent">
+                    🤖
+                </div>
+            </div>
+
+            <div id="sub-agents-container" class="sub-agents-grid">
+                <!-- Sub-agents will be dynamically populated -->
+            </div>
+
+            <div class="stats-panel">
+                <div class="stat-card">
+                    <div class="stat-value" id="agents-count">0</div>
+                    <div class="stat-label">Active Agents</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="tasks-completed">0</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="efficiency-gain">0%</div>
+                    <div class="stat-label">Efficiency Gain</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="time-saved">0h</div>
+                    <div class="stat-label">Time Saved</div>
+                </div>
+            </div>
+
+            <div class="demo-controls">
+                <button class="demo-btn primary" onclick="startDemo()">
+                    <span>▶️</span> Start Demo
+                </button>
+                <button class="demo-btn secondary" onclick="resetDemo()">
+                    <span>🔄</span> Reset
+                </button>
+                <button class="demo-btn secondary" onclick="pauseDemo()">
+                    <span>⏸️</span> Pause
+                </button>
+            </div>
+        </div>
+
+        <div class="visualization-container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">📋 Project Timeline</h2>
+            <div id="timeline" class="timeline">
+                <!-- Timeline items will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="agent-animations.js"></script>
+    <script src="sub-agent-demo.js"></script>
+    <script src="agent-explanations.js"></script>
+    <script src="agent-scenarios.js"></script>
+    
+    <script>
+        // Initialize the visualization
+        document.addEventListener('DOMContentLoaded', function() {
+            loadScenario('authentication');
+            initializeTooltips();
+        });
+
+        function initializeTooltips() {
+            const tooltip = document.getElementById('tooltip');
+            
+            document.addEventListener('mouseover', function(e) {
+                if (e.target.classList.contains('sub-agent')) {
+                    const title = e.target.querySelector('.sub-agent-title').textContent;
+                    const description = e.target.querySelector('.sub-agent-description').textContent;
+                    
+                    tooltip.innerHTML = `<strong>${title}</strong><br>${description}`;
+                    tooltip.classList.add('show');
+                    
+                    const rect = e.target.getBoundingClientRect();
+                    tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+                    tooltip.style.top = (rect.top - tooltip.offsetHeight - 10) + 'px';
+                }
+            });
+            
+            document.addEventListener('mouseout', function(e) {
+                if (e.target.classList.contains('sub-agent')) {
+                    tooltip.classList.remove('show');
+                }
+            });
+        }
+
+        let currentDemo = null;
+        let demoRunning = false;
+
+        function startDemo() {
+            if (demoRunning) return;
+            demoRunning = true;
+            
+            const activeScenario = document.querySelector('.scenario-btn.active').dataset.scenario;
+            if (window.startScenarioDemo) {
+                currentDemo = window.startScenarioDemo(activeScenario);
+            }
+        }
+
+        function pauseDemo() {
+            if (currentDemo && currentDemo.pause) {
+                currentDemo.pause();
+            }
+            demoRunning = false;
+        }
+
+        function resetDemo() {
+            if (currentDemo && currentDemo.reset) {
+                currentDemo.reset();
+            }
+            demoRunning = false;
+            
+            // Reset all agents to initial state
+            const agents = document.querySelectorAll('.sub-agent');
+            agents.forEach(agent => {
+                agent.classList.remove('active', 'working', 'completed');
+                agent.style.animationDelay = '';
+                const progressBar = agent.querySelector('.progress-fill');
+                if (progressBar) {
+                    progressBar.style.width = '0%';
+                }
+            });
+            
+            // Reset stats
+            document.getElementById('agents-count').textContent = '0';
+            document.getElementById('tasks-completed').textContent = '0';
+            document.getElementById('efficiency-gain').textContent = '0%';
+            document.getElementById('time-saved').textContent = '0h';
+        }
+
+        function loadScenario(scenarioName) {
+            // Update active button
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-scenario="${scenarioName}"]`).classList.add('active');
+
+            // Load scenario data
+            if (window.loadScenarioData) {
+                window.loadScenarioData(scenarioName);
+            }
+
+            // Reset demo state
+            resetDemo();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoZone Analytics Scenarios - Claude Code Training</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>AutoZone Data Analytics Scenarios</h1>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html">Main Hub</a></li>
+                    <li><a href="#sales-analytics">Sales Analytics</a></li>
+                    <li><a href="#customer-analytics">Customer Behavior</a></li>
+                    <li><a href="#supply-chain">Supply Chain</a></li>
+                    <li><a href="#performance">Performance</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Master Business Intelligence with AutoZone Data Analytics</h2>
+                <p>Transform data into actionable insights for retail excellence</p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">BI Scenarios</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">Billions</span>
+                        <span class="stat-label">Data Points</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">60+</span>
+                        <span class="stat-label">Learning Hours</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analytics Categories -->
+    <section class="scenario-categories">
+        <div class="container">
+            <h2>Analytics & Business Intelligence Categories</h2>
+            <div class="cards-grid">
+                <div class="card category-card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Sales Analytics</h3>
+                    <p>Revenue tracking, seasonal trends, product performance, regional analysis</p>
+                    <a href="#sales-analytics" class="btn btn-primary">View Scenarios</a>
+                </div>
+                
+                <div class="card category-card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Customer Behavior</h3>
+                    <p>Purchase patterns, loyalty analysis, segmentation, lifetime value</p>
+                    <a href="#customer-analytics" class="btn btn-primary">View Scenarios</a>
+                </div>
+                
+                <div class="card category-card">
+                    <div class="card-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Supply Chain</h3>
+                    <p>Inventory optimization, supplier performance, demand forecasting</p>
+                    <a href="#supply-chain" class="btn btn-primary">View Scenarios</a>
+                </div>
+                
+                <div class="card category-card">
+                    <div class="card-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>Performance Monitoring</h3>
+                    <p>KPI dashboards, real-time alerting, operational metrics</p>
+                    <a href="#performance" class="btn btn-primary">View Scenarios</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sales Analytics Scenarios -->
+    <section id="sales-analytics" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-line"></i> Sales Analytics Scenarios</h2>
+                <span class="badge info">4 Scenarios</span>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 1: Executive Sales Dashboard</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge beginner">Beginner</span>
+                            <span class="badge time">4-5 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone executives need a comprehensive view of sales performance across all channels and regions. The dashboard must provide real-time insights and historical trends for strategic decision-making.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Create an executive-level sales dashboard that aggregates data from 6,000+ stores, e-commerce, and commercial sales channels into actionable insights.</p>
+                    </div>
+                    
+                    <div class="requirements">
+                        <h4>Key Metrics to Display</h4>
+                        <ul>
+                            <li>Real-time sales performance vs. targets</li>
+                            <li>Year-over-year growth trends</li>
+                            <li>Top-performing products and categories</li>
+                            <li>Regional and district comparisons</li>
+                            <li>Channel performance (retail, commercial, online)</li>
+                            <li>Margin analysis and profitability</li>
+                            <li>Market share and competitive positioning</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Build an executive sales dashboard for AutoZone:
+
+Data sources:
+- POS transactions from 6,000+ stores
+- E-commerce sales data
+- Commercial account sales
+- Inventory and cost data
+- Market research data
+
+Key visualizations:
+1. Real-time sales speedometer with daily/monthly targets
+2. Interactive map showing regional performance
+3. Product category performance heatmap
+4. Trend charts for YoY comparisons
+5. Top/bottom performers rankings
+6. Margin waterfall charts
+
+Requirements:
+- Auto-refresh every 15 minutes
+- Mobile-responsive design
+- Export capabilities
+- Drill-down functionality
+- Alert system for significant deviations
+
+Use React, D3.js, and real-time data streaming for dynamic visualizations.</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="learning-objectives">
+                        <h4>Learning Objectives</h4>
+                        <ul>
+                            <li>Business intelligence dashboard design</li>
+                            <li>Real-time data visualization</li>
+                            <li>Executive-level reporting principles</li>
+                            <li>Data aggregation and performance optimization</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 2: Seasonal Demand Forecasting</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">6-8 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone's sales are heavily influenced by seasonal patterns (winter batteries, summer AC parts, holiday promotions). Accurate forecasting is crucial for inventory planning and resource allocation.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a machine learning-powered forecasting system that predicts seasonal demand patterns and helps optimize inventory levels and promotional strategies.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Create seasonal demand forecasting system for AutoZone:
+
+Historical data to analyze:
+- 5 years of sales data by product category
+- Weather patterns and temperature data
+- Economic indicators and gas prices
+- Holiday and promotional calendar
+- Regional demographic data
+
+Forecasting models needed:
+1. Battery sales surge prediction (cold weather)
+2. AC/cooling system parts (summer demand)
+3. Tire sales patterns (seasonal changes)
+4. Oil change demand (seasonal maintenance)
+5. Holiday gift card and accessory sales
+
+Implementation:
+- Time series analysis with seasonal decomposition
+- Machine learning models (ARIMA, Prophet, LSTM)
+- External factor integration (weather APIs)
+- Confidence intervals and scenario planning
+- Interactive forecasting dashboard
+
+Provide actionable recommendations for inventory planning and promotional timing.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 3: Product Performance Analytics</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">5-7 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>With over 1 million SKUs, AutoZone needs sophisticated analytics to identify top performers, slow movers, and optimization opportunities across product categories.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a comprehensive product performance analysis system that identifies trends, opportunities, and risks across AutoZone's vast product catalog.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Design product performance analytics for AutoZone:
+
+Key analyses:
+1. ABC analysis (top performers vs. slow movers)
+2. Product lifecycle tracking (introduction to decline)
+3. Cross-selling and bundle opportunities
+4. Price elasticity analysis
+5. Competitive product positioning
+6. Regional performance variations
+
+Metrics to calculate:
+- Sales velocity and acceleration
+- Inventory turnover rates
+- Profit margin trends
+- Customer satisfaction scores
+- Return/warranty rates
+- Market share by category
+
+Visualizations:
+- Product performance matrix (sales vs. profit)
+- Lifecycle stage scatter plots
+- Heatmaps for regional variations
+- Trend analysis charts
+- Recommendation engines for merchandising
+
+Include automated alerts for significant performance changes and optimization recommendations.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 4: Pricing Optimization Engine</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge advanced">Advanced</span>
+                            <span class="badge time">8-10 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone needs dynamic pricing strategies that consider competitive pricing, inventory levels, demand patterns, and profit margins to maximize revenue while maintaining market competitiveness.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build an intelligent pricing optimization system that recommends optimal prices based on multiple factors and market conditions.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Build pricing optimization engine for AutoZone:
+
+Pricing factors to consider:
+1. Competitive pricing data (web scraping)
+2. Inventory levels and velocity
+3. Historical demand elasticity
+4. Seasonal patterns and trends
+5. Customer segment sensitivity
+6. Margin requirements and targets
+7. Promotional calendar and events
+
+Optimization scenarios:
+- Clearance pricing for slow-moving inventory
+- Dynamic pricing for high-demand periods
+- Competitive response strategies
+- Bundle pricing optimization
+- Regional pricing variations
+
+Features:
+- Real-time price monitoring dashboard
+- Price change impact simulation
+- A/B testing framework for price experiments
+- Automated price recommendations
+- Approval workflows for price changes
+- Performance tracking and optimization
+
+Implement machine learning models for price elasticity prediction and revenue optimization algorithms.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Behavior Analytics -->
+    <section id="customer-analytics" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> Customer Behavior Analytics Scenarios</h2>
+                <span class="badge info">3 Scenarios</span>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 5: Customer Segmentation & Personas</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">6-8 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone serves diverse customer segments from DIY enthusiasts to professional mechanics. Understanding these segments enables personalized marketing and improved customer experience.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a customer segmentation system that identifies distinct customer personas and enables targeted marketing and personalization strategies.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Create customer segmentation system for AutoZone:
+
+Data sources for segmentation:
+- Purchase history and frequency
+- Product categories and brands
+- Average order value and timing
+- Store vs. online preferences
+- Geographic and demographic data
+- Seasonal buying patterns
+
+Expected customer personas:
+1. DIY Enthusiasts (weekend warriors, project-focused)
+2. Professional Mechanics (frequent, bulk purchases)
+3. Fleet Operators (commercial accounts, scheduled maintenance)
+4. Occasional Buyers (emergency repairs, basic maintenance)
+5. Price-Sensitive Shoppers (deal seekers, budget-conscious)
+
+Implementation:
+- K-means clustering and RFM analysis
+- Behavior-based segmentation models
+- Dynamic persona assignment
+- Segment-specific dashboards
+- Targeted marketing campaign tools
+- Personalization recommendation engine
+
+Include segment performance tracking and persona evolution analysis.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 6: Customer Lifetime Value Prediction</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge advanced">Advanced</span>
+                            <span class="badge time">8-10 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>Understanding customer lifetime value (CLV) helps AutoZone prioritize marketing spend, loyalty programs, and customer service investments for maximum ROI.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a predictive CLV model that forecasts customer value and identifies high-value prospects for targeted retention and acquisition strategies.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Build Customer Lifetime Value prediction system:
+
+CLV calculation factors:
+1. Historical purchase value and frequency
+2. Customer acquisition cost
+3. Retention probability over time
+4. Cross-selling and upselling potential
+5. Churn risk indicators
+6. Seasonal behavior patterns
+
+Predictive models:
+- Regression models for value prediction
+- Survival analysis for retention
+- Classification for churn prediction
+- Time series for purchase timing
+- Deep learning for complex patterns
+
+Business applications:
+- Marketing budget allocation
+- Customer service prioritization
+- Loyalty program optimization
+- Acquisition targeting
+- Retention campaign triggers
+- Product recommendation systems
+
+Create CLV dashboard with scenario planning, cohort analysis, and actionable insights for marketing teams.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 7: Shopping Cart Abandonment Analysis</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">5-7 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>E-commerce cart abandonment represents significant lost revenue. Understanding why customers abandon carts and implementing targeted recovery strategies can dramatically improve conversion rates.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a comprehensive cart abandonment analysis system that identifies causes and implements automated recovery strategies.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Analyze and reduce cart abandonment for AutoZone:
+
+Abandonment factors to track:
+1. Checkout process friction points
+2. Shipping costs and options
+3. Payment method availability
+4. Product availability changes
+5. Price changes during session
+6. Account creation requirements
+7. Mobile vs. desktop differences
+
+Analytics features:
+- Funnel analysis with drop-off points
+- Heatmaps for checkout process
+- A/B testing for checkout optimization
+- Cohort analysis for abandonment patterns
+- Real-time abandonment monitoring
+
+Recovery strategies:
+- Triggered email campaigns
+- Push notifications for mobile app
+- Retargeting ads with abandoned items
+- Limited-time discount offers
+- Simplified checkout options
+- Progressive profiling for account creation
+
+Implement machine learning to predict abandonment likelihood and trigger personalized recovery actions.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supply Chain Analytics -->
+    <section id="supply-chain" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-truck"></i> Supply Chain Analytics Scenarios</h2>
+                <span class="badge info">3 Scenarios</span>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 8: Inventory Optimization Engine</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge advanced">Advanced</span>
+                            <span class="badge time">10-12 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone must balance inventory levels across 6,000+ stores to minimize carrying costs while avoiding stockouts. This requires sophisticated optimization considering demand patterns, lead times, and storage constraints.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build an AI-powered inventory optimization system that determines optimal stock levels for each SKU at each location.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Create inventory optimization engine for AutoZone:
+
+Optimization variables:
+- Safety stock levels by location and SKU
+- Reorder points and quantities
+- Economic order quantities (EOQ)
+- Lead time variability
+- Demand forecast accuracy
+- Storage capacity constraints
+- Carrying costs vs. stockout costs
+
+Machine learning components:
+1. Demand forecasting models
+2. Lead time prediction
+3. Seasonality adjustment
+4. New product adoption curves
+5. Promotional impact prediction
+
+Business constraints:
+- Minimum service level requirements (98% fill rate)
+- Storage space limitations
+- Capital investment limits
+- Supplier minimum order quantities
+- Transportation optimization
+
+Create optimization algorithms considering trade-offs between cost, service level, and cash flow. Include scenario planning and sensitivity analysis.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 9: Supplier Performance Analytics</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">6-8 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone works with hundreds of suppliers globally. Monitoring supplier performance helps ensure quality, delivery reliability, and cost optimization while identifying risks and opportunities.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a comprehensive supplier performance management system that tracks KPIs, identifies issues, and supports strategic sourcing decisions.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Build supplier performance analytics for AutoZone:
+
+Key performance indicators:
+1. On-time delivery percentage
+2. Quality metrics (defect rates, returns)
+3. Price competitiveness and stability
+4. Lead time accuracy and consistency
+5. Fill rate and order completion
+6. Invoice accuracy and payment terms
+7. Innovation and new product development
+
+Risk assessment factors:
+- Financial stability indicators
+- Geographic concentration risks
+- Capacity constraints
+- Regulatory compliance
+- Sustainability metrics
+
+Analytics features:
+- Supplier scorecards and rankings
+- Trend analysis and predictive alerts
+- Benchmarking against industry standards
+- Risk heat maps and early warnings
+- Contract performance tracking
+- Cost analysis and savings opportunities
+
+Create automated reporting system with escalation workflows for performance issues and strategic sourcing recommendations.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Monitoring -->
+    <section id="performance" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Performance Monitoring Scenarios</h2>
+                <span class="badge info">2 Scenarios</span>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 10: Real-Time Operations Dashboard</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge intermediate">Intermediate</span>
+                            <span class="badge time">6-8 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>AutoZone operations teams need real-time visibility into system performance, store operations, and business metrics to quickly identify and resolve issues.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Create a comprehensive real-time monitoring dashboard that provides operational insights and automated alerting for critical issues.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Build real-time operations dashboard for AutoZone:
+
+Monitoring categories:
+1. System Performance
+   - Website/app response times
+   - Database query performance
+   - Payment processing success rates
+   - API availability and latency
+
+2. Store Operations
+   - POS system status across all stores
+   - Transaction volumes and processing times
+   - Inventory sync status
+   - Store connectivity issues
+
+3. Business Metrics
+   - Real-time sales performance
+   - Conversion rates and cart abandonment
+   - Customer service queue lengths
+   - Inventory levels and stockouts
+
+Features:
+- Color-coded status indicators
+- Drill-down capabilities for detailed analysis
+- Automated alert thresholds
+- Historical trend comparisons
+- Mobile-responsive design for on-call teams
+
+Implement using WebSocket connections, time-series databases, and alerting systems with escalation workflows.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-title">
+                        <h3>Scenario 11: Predictive Analytics for Store Operations</h3>
+                        <div class="difficulty-badges">
+                            <span class="badge advanced">Advanced</span>
+                            <span class="badge time">8-10 hours</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scenario-content">
+                    <div class="scenario-description">
+                        <h4>Background</h4>
+                        <p>Proactive issue detection and prediction can prevent store downtime and operational disruptions. Machine learning can identify patterns that indicate potential problems before they occur.</p>
+                        
+                        <h4>Your Mission</h4>
+                        <p>Build a predictive analytics system that forecasts operational issues and provides recommendations for preventive actions.</p>
+                    </div>
+                    
+                    <div class="example-prompt">
+                        <h4>Claude Code Prompt Example</h4>
+                        <div class="code-block">
+                            <pre><code class="language-text">Create predictive analytics for AutoZone store operations:
+
+Prediction targets:
+1. Equipment failures (POS systems, barcode scanners)
+2. Peak traffic periods requiring additional staffing
+3. Inventory stockouts before they occur
+4. Customer service issues and complaints
+5. Network connectivity problems
+6. Seasonal demand surges
+
+Machine learning models:
+- Time series forecasting for traffic and sales
+- Anomaly detection for system performance
+- Classification models for failure prediction
+- Clustering for similar store patterns
+- Regression for demand forecasting
+
+Data sources:
+- Historical operational data
+- Weather and event data
+- Store performance metrics
+- Equipment telemetry
+- Staff scheduling data
+
+Create automated recommendations for staffing adjustments, inventory transfers, equipment maintenance, and operational improvements.</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Analytics Projects -->
+    <section class="advanced-projects">
+        <div class="container">
+            <h2>Advanced Analytics Projects</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI-Powered Demand Sensing</h3>
+                    <p>Use machine learning to detect early demand signals from social media, weather, and economic indicators</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">TensorFlow</span>
+                        <span class="tech-tag">NLP</span>
+                        <span class="tech-tag">APIs</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Graph Analytics for Cross-Selling</h3>
+                    <p>Build product relationship networks to identify cross-selling opportunities and bundle recommendations</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Neo4j</span>
+                        <span class="tech-tag">Graph ML</span>
+                        <span class="tech-tag">D3.js</span>
+                        <span class="tech-tag">Cypher</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Computer Vision for Inventory</h3>
+                    <p>Implement shelf monitoring using computer vision to track inventory levels and planogram compliance</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">OpenCV</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Edge Computing</span>
+                        <span class="tech-tag">IoT</span>
+                    </div>
+                </div>
+                
+                <div class="project-card">
+                    <div class="project-icon">
+                        <i class="fas fa-stream"></i>
+                    </div>
+                    <h3>Real-Time Streaming Analytics</h3>
+                    <p>Process millions of transactions in real-time for fraud detection and dynamic pricing</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Kafka</span>
+                        <span class="tech-tag">Spark</span>
+                        <span class="tech-tag">Elasticsearch</span>
+                        <span class="tech-tag">Kibana</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Engineering Challenges -->
+    <section class="data-challenges">
+        <div class="container">
+            <h2>Data Engineering Challenges</h2>
+            <div class="challenge-grid">
+                <div class="challenge-card">
+                    <h3>Big Data Processing</h3>
+                    <ul>
+                        <li>Process TB-scale transaction data daily</li>
+                        <li>Real-time ETL pipelines for 6,000+ stores</li>
+                        <li>Data lake architecture for analytics</li>
+                        <li>Stream processing for live dashboards</li>
+                    </ul>
+                </div>
+                
+                <div class="challenge-card">
+                    <h3>Data Quality & Governance</h3>
+                    <ul>
+                        <li>Automated data quality monitoring</li>
+                        <li>Master data management for products</li>
+                        <li>Data lineage tracking and documentation</li>
+                        <li>Privacy-compliant analytics frameworks</li>
+                    </ul>
+                </div>
+                
+                <div class="challenge-card">
+                    <h3>Performance Optimization</h3>
+                    <ul>
+                        <li>Sub-second query response for dashboards</li>
+                        <li>Columnar storage and compression</li>
+                        <li>Intelligent caching strategies</li>
+                        <li>Query optimization for complex joins</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AutoZone Analytics Training</h3>
+                    <p>Transform data into business value with advanced analytics</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="ecommerce-scenarios.html">E-commerce Platform</a></li>
+                        <li><a href="store-ops-scenarios.html">Store Operations</a></li>
+                        <li><a href="modernization-scenarios.html">System Modernization</a></li>
+                        <li><a href="index.html">Training Hub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="case-studies.html">Success Stories</a></li>
+                        <li><a href="#troubleshooting">Help & Support</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Acceptance Testing Scenarios - AutoZone Claude Code Training</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .uat-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .uat-header {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .uat-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .uat-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        .uat-content {
+            padding: 40px;
+        }
+        
+        .scenario-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #f1f3f4;
+            padding-bottom: 20px;
+        }
+        
+        .scenario-tab {
+            padding: 12px 24px;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6c757d;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .scenario-tab.active {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(111, 66, 193, 0.3);
+        }
+        
+        .scenario-tab:hover {
+            background: #e9ecef;
+            transform: translateY(-1px);
+        }
+        
+        .scenario-tab.active:hover {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+        }
+        
+        .scenario-content {
+            display: none;
+        }
+        
+        .scenario-content.active {
+            display: block;
+        }
+        
+        .scenario-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #6f42c1;
+            transition: all 0.3s ease;
+        }
+        
+        .scenario-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .scenario-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        
+        .scenario-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .meta-icon {
+            font-size: 1rem;
+        }
+        
+        .difficulty-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .difficulty-beginner {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .difficulty-intermediate {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .difficulty-advanced {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .scenario-description {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .scenario-description h4 {
+            color: #6f42c1;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .scenario-description p {
+            line-height: 1.6;
+            color: #495057;
+        }
+        
+        .test-steps {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #e9ecef;
+        }
+        
+        .steps-header {
+            background: #6f42c1;
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .step {
+            padding: 20px;
+            border-bottom: 1px solid #f1f3f4;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .step:last-child {
+            border-bottom: none;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .step-description {
+            color: #6c757d;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .step-expected {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border-left: 3px solid #2196f3;
+            font-size: 0.9rem;
+        }
+        
+        .step-expected strong {
+            color: #1976d2;
+        }
+        
+        .scenario-checklist {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .checklist-header {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .checklist-item:last-child {
+            border-bottom: none;
+        }
+        
+        .checklist-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #6f42c1;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .checklist-checkbox:hover {
+            background: #f3f0ff;
+        }
+        
+        .checklist-checkbox.checked {
+            background: #6f42c1;
+            color: white;
+        }
+        
+        .checklist-text {
+            color: #495057;
+            flex: 1;
+        }
+        
+        .scenario-results {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .results-title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .results-status {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-passed {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-pending {
+            background: #e2e3e5;
+            color: #495057;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .result-metric {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #6f42c1;
+            margin-bottom: 5px;
+        }
+        
+        .metric-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .comments-section {
+            margin-top: 20px;
+        }
+        
+        .comment-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: #6f42c1;
+            box-shadow: 0 0 0 3px rgba(111, 66, 193, 0.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #6f42c1;
+            border: 2px solid #6f42c1;
+        }
+        
+        .btn-secondary:hover {
+            background: #6f42c1;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .summary-dashboard {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .summary-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .summary-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        @media (max-width: 768px) {
+            .uat-header h1 {
+                font-size: 2rem;
+            }
+            
+            .uat-header p {
+                font-size: 1rem;
+            }
+            
+            .uat-content {
+                padding: 20px;
+            }
+            
+            .scenario-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 10px;
+            }
+            
+            .scenario-card {
+                padding: 20px;
+            }
+            
+            .scenario-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .scenario-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .results-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .modal-body {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="uat-container">
+        <div class="uat-header">
+            <h1>🎯 User Acceptance Testing</h1>
+            <p>Comprehensive real-world testing scenarios for the AutoZone Claude Code Training Website to validate learning effectiveness and user experience</p>
+        </div>
+        
+        <div class="uat-content">
+            <!-- Summary Dashboard -->
+            <div class="summary-dashboard" id="summary-dashboard">
+                <div class="summary-title">Testing Progress Overview</div>
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-number" id="completed-scenarios">0</div>
+                        <div class="summary-label">Completed Scenarios</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="total-scenarios">24</div>
+                        <div class="summary-label">Total Scenarios</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="success-rate">0%</div>
+                        <div class="summary-label">Success Rate</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-number" id="total-time">0h</div>
+                        <div class="summary-label">Testing Time</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scenario Tabs -->
+            <div class="scenario-tabs">
+                <button class="scenario-tab active" onclick="switchScenario('new-employee')">
+                    👋 New Employee
+                </button>
+                <button class="scenario-tab" onclick="switchScenario('developer')">
+                    👨‍💻 Developer Tasks
+                </button>
+                <button class="scenario-tab" onclick="switchScenario('team-lead')">
+                    👑 Team Lead
+                </button>
+                <button class="scenario-tab" onclick="switchScenario('learning')">
+                    📚 Learning Path
+                </button>
+                <button class="scenario-tab" onclick="switchScenario('accessibility')">
+                    ♿ Accessibility
+                </button>
+                <button class="scenario-tab" onclick="switchScenario('performance')">
+                    ⚡ Performance
+                </button>
+            </div>
+            
+            <!-- New Employee Scenarios -->
+            <div id="new-employee-scenarios" class="scenario-content active">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">First Day Setup - New AutoZone Developer</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>30 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Junior Developer</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-beginner">Beginner</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Sarah is a new junior developer joining AutoZone's IT team. She has 2 years of JavaScript experience but has never used Claude Code. This is her first day, and she needs to set up Claude Code following company security protocols and complete the foundation training.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Navigate to Training Website</div>
+                                <div class="step-description">Open the AutoZone Claude Code Training Hub in a browser</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Homepage loads within 3 seconds, displays welcome message and navigation clearly
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Security Setup</div>
+                                <div class="step-description">Follow the Vertex AI security configuration instructions</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Clear step-by-step instructions, copy-paste code blocks, successful environment variable setup
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Installation Process</div>
+                                <div class="step-description">Complete Claude Code installation for macOS following provided instructions</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Installation completes without errors, able to run 'claude --version' successfully
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <div class="step-title">First Command Test</div>
+                                <div class="step-description">Run '/status' command in Claude Code terminal</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Status output shows Vertex AI configuration, correct project ID, and working directory
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <div class="step-title">Foundation Quiz</div>
+                                <div class="step-description">Take the foundation knowledge assessment</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Achieves 80% or higher score, receives foundation certification badge
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-checklist">
+                        <div class="checklist-header">
+                            <span>✅</span>
+                            <span>Success Criteria Checklist</span>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User can navigate the website intuitively without assistance</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">Security setup completes successfully on first attempt</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">Installation process is clear and error-free</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User feels confident to proceed to next training module</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">Total setup time is under 30 minutes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-results">
+                        <div class="results-header">
+                            <div class="results-title">Test Results</div>
+                            <div class="results-status status-pending">Pending</div>
+                        </div>
+                        <div class="results-grid">
+                            <div class="result-metric">
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">Time Taken</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">Quiz Score</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">Help Requests</div>
+                            </div>
+                            <div class="result-metric">
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">User Rating</div>
+                            </div>
+                        </div>
+                        <div class="comments-section">
+                            <textarea class="comment-input" placeholder="Add comments about user experience, pain points, or suggestions for improvement..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional New Employee Scenarios -->
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Memory Management Learning</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>20 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>New Developer</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-beginner">Beginner</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Mike is learning about Claude Code's memory management system. He needs to understand how CLAUDE.md files work and how to effectively manage project context for optimal AI assistance.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Access Memory Section</div>
+                                <div class="step-description">Navigate to the Memory Management section from the main menu</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Section loads quickly, shows clear explanation of memory files
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Interactive Demo</div>
+                                <div class="step-description">Use the /status command demonstration feature</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Demo runs smoothly, shows realistic Claude Code output
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Create Practice CLAUDE.md</div>
+                                <div class="step-description">Follow tutorial to create a sample CLAUDE.md file</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Clear template provided, user successfully creates file
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-checklist">
+                        <div class="checklist-header">
+                            <span>✅</span>
+                            <span>Learning Effectiveness</span>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User understands the purpose of CLAUDE.md files</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User can explain difference between project and global memory</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">Interactive demo enhances understanding</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Developer Tasks Scenarios -->
+            <div id="developer-scenarios" class="scenario-content">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Code Review Workflow</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>45 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Mid-level Developer</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Jessica is an experienced developer who needs to learn how to use Claude Code for reviewing pull requests and providing constructive feedback on team code contributions.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Learn /review Command</div>
+                                <div class="step-description">Study the code review workflow documentation</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Clear examples of /review command usage with sample outputs
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Practice Code Review</div>
+                                <div class="step-description">Use code playground to simulate reviewing a sample pull request</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Playground provides realistic PR scenario, Claude Code gives useful feedback
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Best Practices Application</div>
+                                <div class="step-description">Apply AutoZone-specific coding standards in review</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> User can identify style violations and suggest improvements
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-checklist">
+                        <div class="checklist-header">
+                            <span>✅</span>
+                            <span>Skill Validation</span>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User can effectively use /review command</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">Reviews follow AutoZone coding standards</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="checklist-checkbox" onclick="toggleCheckbox(this)"></div>
+                            <div class="checklist-text">User provides constructive, specific feedback</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Team Lead Scenarios -->
+            <div id="team-lead-scenarios" class="scenario-content">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Team Training Management</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>60 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Team Lead</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-advanced">Advanced</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>David is a team lead responsible for onboarding 5 new developers to Claude Code. He needs to create a training plan, track progress, and ensure team adoption meets company standards.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Access Team Dashboard</div>
+                                <div class="step-description">Navigate to team management features</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Dashboard shows team progress overview, individual completion rates
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Create Training Plan</div>
+                                <div class="step-description">Set up customized learning paths for team members</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Can assign specific modules, set deadlines, track completion
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Monitor Progress</div>
+                                <div class="step-description">Review team member progress and identify gaps</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Clear metrics, ability to identify struggling team members
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Learning Path Scenarios -->
+            <div id="learning-scenarios" class="scenario-content">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Progressive Skill Building</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>120 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Any Level</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Alex wants to progress from foundation to intermediate level. They need to complete all required modules, pass assessments, and demonstrate practical application of Claude Code skills.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Complete Foundation Path</div>
+                                <div class="step-description">Finish all foundation modules with 85% minimum score</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Progress tracking shows completion, unlocks intermediate content
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Practical Application</div>
+                                <div class="step-description">Complete hands-on coding exercises using Claude Code</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Code playground provides realistic scenarios, validates solutions
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Certification Assessment</div>
+                                <div class="step-description">Take intermediate-level certification exam</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Assessment is challenging but fair, provides detailed feedback
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Accessibility Scenarios -->
+            <div id="accessibility-scenarios" class="scenario-content">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Screen Reader Navigation</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>40 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Visually Impaired User</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Maria uses a screen reader and needs to complete the Claude Code training. She should be able to navigate all content, complete exercises, and receive certifications using only assistive technology.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Screen Reader Navigation</div>
+                                <div class="step-description">Navigate entire website using only screen reader</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> All content is accessible, proper heading structure, alt text for images
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-content">
+                                <div class="step-title">Interactive Elements</div>
+                                <div class="step-description">Use code playground and simulator with screen reader</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Form controls are properly labeled, keyboard navigation works
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performance Scenarios -->
+            <div id="performance-scenarios" class="scenario-content">
+                <div class="scenario-card">
+                    <div class="scenario-header">
+                        <div>
+                            <h3 class="scenario-title">Low Bandwidth Usage</h3>
+                            <div class="scenario-meta">
+                                <div class="meta-item">
+                                    <span class="meta-icon">⏱️</span>
+                                    <span>30 minutes</span>
+                                </div>
+                                <div class="meta-item">
+                                    <span class="meta-icon">👤</span>
+                                    <span>Remote Worker</span>
+                                </div>
+                                <div class="difficulty-badge difficulty-intermediate">Intermediate</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="scenario-description">
+                        <h4>Scenario Context</h4>
+                        <p>Tom is working from a remote location with limited internet bandwidth (3G connection). He needs to complete training modules without excessive loading times or data usage.</p>
+                    </div>
+                    
+                    <div class="test-steps">
+                        <div class="steps-header">Test Steps</div>
+                        
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Throttled Connection Test</div>
+                                <div class="step-description">Simulate 3G connection speeds</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Pages load within 5 seconds, content is usable while loading
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Offline Capability</div>
+                                <div class="step-description">Test offline functionality when connection drops</div>
+                                <div class="step-expected">
+                                    <strong>Expected:</strong> Previously viewed content remains accessible, progress is saved
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="action-btn btn-primary" onclick="startTesting()">
+                    🚀 Start Testing Session
+                </button>
+                <button class="action-btn btn-secondary" onclick="generateReport()">
+                    📊 Generate Report
+                </button>
+                <button class="action-btn btn-success" onclick="exportResults()">
+                    💾 Export Results
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal for Instructions -->
+    <div id="instructions-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">Testing Instructions</div>
+            <div class="modal-body">
+                <p><strong>Before you begin:</strong></p>
+                <ul>
+                    <li>Ensure you have test users available for different scenarios</li>
+                    <li>Set up screen recording software for documentation</li>
+                    <li>Prepare test environments (different browsers, devices)</li>
+                    <li>Have network throttling tools ready for performance tests</li>
+                </ul>
+                <p><strong>During testing:</strong></p>
+                <ul>
+                    <li>Record all observations and user feedback</li>
+                    <li>Note any deviations from expected behavior</li>
+                    <li>Time each scenario completion</li>
+                    <li>Check all success criteria before marking complete</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button class="action-btn btn-primary" onclick="closeModal()">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testingData = {
+            completedScenarios: 0,
+            totalScenarios: 24,
+            startTime: null,
+            scenarioResults: {}
+        };
+        
+        function switchScenario(scenarioType) {
+            // Hide all scenario contents
+            document.querySelectorAll('.scenario-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.scenario-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected scenario content
+            const selectedContent = document.getElementById(scenarioType + '-scenarios');
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            // Activate corresponding tab
+            event.target.classList.add('active');
+        }
+        
+        function toggleCheckbox(checkbox) {
+            checkbox.classList.toggle('checked');
+            if (checkbox.classList.contains('checked')) {
+                checkbox.innerHTML = '✓';
+            } else {
+                checkbox.innerHTML = '';
+            }
+            
+            updateScenarioProgress();
+        }
+        
+        function updateScenarioProgress() {
+            const checkedBoxes = document.querySelectorAll('.checklist-checkbox.checked').length;
+            const totalBoxes = document.querySelectorAll('.checklist-checkbox').length;
+            const percentage = Math.round((checkedBoxes / totalBoxes) * 100);
+            
+            // Update summary dashboard
+            document.getElementById('completed-scenarios').textContent = checkedBoxes;
+            document.getElementById('success-rate').textContent = percentage + '%';
+        }
+        
+        function startTesting() {
+            testingData.startTime = new Date();
+            document.getElementById('instructions-modal').classList.add('show');
+        }
+        
+        function closeModal() {
+            document.getElementById('instructions-modal').classList.remove('show');
+        }
+        
+        function generateReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                testingSession: {
+                    startTime: testingData.startTime,
+                    duration: testingData.startTime ? new Date() - testingData.startTime : 0,
+                    completedScenarios: testingData.completedScenarios,
+                    totalScenarios: testingData.totalScenarios
+                },
+                scenarios: collectScenarioData(),
+                summary: {
+                    overallSuccessRate: calculateOverallSuccessRate(),
+                    averageTimePerScenario: calculateAverageTime(),
+                    criticalIssues: identifyCriticalIssues(),
+                    recommendations: generateRecommendations()
+                }
+            };
+            
+            // Create downloadable report
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `uat-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('UAT Report generated and downloaded successfully!');
+        }
+        
+        function exportResults() {
+            const results = {
+                timestamp: new Date().toISOString(),
+                checkedItems: Array.from(document.querySelectorAll('.checklist-checkbox.checked')).length,
+                totalItems: document.querySelectorAll('.checklist-checkbox').length,
+                comments: Array.from(document.querySelectorAll('.comment-input')).map(input => input.value).filter(comment => comment.trim()),
+                scenarioStatuses: collectScenarioStatuses()
+            };
+            
+            const csv = convertToCSV(results);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `uat-results-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Results exported to CSV successfully!');
+        }
+        
+        function collectScenarioData() {
+            const scenarios = [];
+            document.querySelectorAll('.scenario-card').forEach((card, index) => {
+                const title = card.querySelector('.scenario-title').textContent;
+                const checkedItems = card.querySelectorAll('.checklist-checkbox.checked').length;
+                const totalItems = card.querySelectorAll('.checklist-checkbox').length;
+                const comments = card.querySelector('.comment-input').value;
+                
+                scenarios.push({
+                    id: index + 1,
+                    title,
+                    completionRate: Math.round((checkedItems / totalItems) * 100),
+                    checkedItems,
+                    totalItems,
+                    comments
+                });
+            });
+            
+            return scenarios;
+        }
+        
+        function calculateOverallSuccessRate() {
+            const totalChecked = document.querySelectorAll('.checklist-checkbox.checked').length;
+            const totalItems = document.querySelectorAll('.checklist-checkbox').length;
+            return Math.round((totalChecked / totalItems) * 100);
+        }
+        
+        function calculateAverageTime() {
+            if (!testingData.startTime) return 0;
+            const totalTime = new Date() - testingData.startTime;
+            const completedScenarios = document.querySelectorAll('.checklist-checkbox.checked').length;
+            return completedScenarios > 0 ? Math.round(totalTime / completedScenarios / 1000 / 60) : 0; // minutes
+        }
+        
+        function identifyCriticalIssues() {
+            const issues = [];
+            const scenarios = collectScenarioData();
+            
+            scenarios.forEach(scenario => {
+                if (scenario.completionRate < 70) {
+                    issues.push(`${scenario.title}: Low completion rate (${scenario.completionRate}%)`);
+                }
+            });
+            
+            return issues;
+        }
+        
+        function generateRecommendations() {
+            const recommendations = [];
+            const overallRate = calculateOverallSuccessRate();
+            
+            if (overallRate < 80) {
+                recommendations.push('Overall success rate is below target. Review failed scenarios for improvement opportunities.');
+            }
+            
+            if (overallRate >= 95) {
+                recommendations.push('Excellent results! Consider expanding testing scenarios or increasing difficulty.');
+            }
+            
+            recommendations.push('Conduct follow-up testing after implementing fixes.');
+            recommendations.push('Schedule regular UAT sessions for continuous improvement.');
+            
+            return recommendations;
+        }
+        
+        function collectScenarioStatuses() {
+            const statuses = {};
+            document.querySelectorAll('.scenario-card').forEach((card, index) => {
+                const title = card.querySelector('.scenario-title').textContent;
+                const status = card.querySelector('.results-status').textContent;
+                statuses[title] = status;
+            });
+            return statuses;
+        }
+        
+        function convertToCSV(data) {
+            const rows = [
+                ['Metric', 'Value'],
+                ['Timestamp', data.timestamp],
+                ['Checked Items', data.checkedItems],
+                ['Total Items', data.totalItems],
+                ['Success Rate', `${Math.round((data.checkedItems / data.totalItems) * 100)}%`],
+                ['Comments Count', data.comments.length]
+            ];
+            
+            return rows.map(row => row.join(',')).join('\n');
+        }
+        
+        // Initialize dashboard
+        function updateDashboard() {
+            const totalTime = testingData.startTime ? 
+                Math.round((new Date() - testingData.startTime) / 1000 / 60 / 60 * 10) / 10 : 0;
+            document.getElementById('total-time').textContent = totalTime + 'h';
+        }
+        
+        // Update dashboard every minute
+        setInterval(updateDashboard, 60000);
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateScenarioProgress();
+        });
+    </script>
+</body>
+</html>

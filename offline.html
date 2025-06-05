@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - AutoZone Claude Code Training Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #FF6500 0%, #FF8A00 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideUp 0.6s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .offline-icon {
+            font-size: 80px;
+            color: #FF6500;
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .offline-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .offline-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .offline-content {
+            text-align: left;
+            margin: 30px 0;
+        }
+        
+        .available-content {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .available-content h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .available-content ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .available-content li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .available-content li:last-child {
+            border-bottom: none;
+        }
+        
+        .available-content .icon {
+            color: #28a745;
+            font-size: 16px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .action-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-card:hover {
+            border-color: #FF6500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 101, 0, 0.1);
+        }
+        
+        .action-card .card-icon {
+            font-size: 24px;
+            color: #FF6500;
+            margin-bottom: 10px;
+        }
+        
+        .action-card h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+        
+        .action-card p {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            padding: 15px;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            color: #856404;
+        }
+        
+        .connection-status.online {
+            background: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ffc107;
+        }
+        
+        .status-indicator.online {
+            background: #28a745;
+        }
+        
+        .retry-button {
+            background: #FF6500;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 20px 10px;
+        }
+        
+        .retry-button:hover {
+            background: #e55a00;
+            transform: translateY(-1px);
+        }
+        
+        .retry-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .home-button {
+            background: transparent;
+            color: #FF6500;
+            border: 2px solid #FF6500;
+        }
+        
+        .home-button:hover {
+            background: #FF6500;
+            color: white;
+        }
+        
+        .offline-tips {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .offline-tips h4 {
+            margin-bottom: 15px;
+            color: #1565c0;
+        }
+        
+        .offline-tips ul {
+            list-style-position: inside;
+            color: #1976d2;
+        }
+        
+        .offline-tips li {
+            margin-bottom: 8px;
+        }
+        
+        @media (max-width: 600px) {
+            .offline-container {
+                padding: 30px 20px;
+            }
+            
+            .offline-title {
+                font-size: 24px;
+            }
+            
+            .offline-icon {
+                font-size: 60px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">
+            <i class="fas fa-wifi" id="connection-icon"></i>
+        </div>
+        
+        <h1 class="offline-title">You're Offline</h1>
+        <p class="offline-subtitle">
+            Don't worry! You can still access your cached training content and continue learning.
+        </p>
+        
+        <div class="connection-status" id="connection-status">
+            <div class="status-indicator" id="status-indicator"></div>
+            <span id="status-text">Checking connection...</span>
+        </div>
+        
+        <div class="available-content">
+            <h3>
+                <i class="fas fa-check-circle icon"></i>
+                Available Offline Content
+            </h3>
+            <ul id="offline-content-list">
+                <li><i class="fas fa-shield-alt icon"></i> Security Setup Guide</li>
+                <li><i class="fas fa-download icon"></i> Installation Instructions</li>
+                <li><i class="fas fa-terminal icon"></i> Commands Reference</li>
+                <li><i class="fas fa-tools icon"></i> Troubleshooting Guide</li>
+                <li><i class="fas fa-brain icon"></i> Memory Management</li>
+                <li><i class="fas fa-exclamation-triangle icon"></i> Common Pitfalls</li>
+            </ul>
+        </div>
+        
+        <div class="quick-actions">
+            <div class="action-card" onclick="loadCachedContent('security')">
+                <div class="card-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4>Security Setup</h4>
+                <p>Access security configuration guide</p>
+            </div>
+            
+            <div class="action-card" onclick="loadCachedContent('commands')">
+                <div class="card-icon">
+                    <i class="fas fa-terminal"></i>
+                </div>
+                <h4>Commands</h4>
+                <p>View command reference</p>
+            </div>
+            
+            <div class="action-card" onclick="loadCachedContent('troubleshooting')">
+                <div class="card-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h4>Help</h4>
+                <p>Get troubleshooting assistance</p>
+            </div>
+            
+            <div class="action-card" onclick="showFavorites()">
+                <div class="card-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h4>Favorites</h4>
+                <p>View your saved content</p>
+            </div>
+        </div>
+        
+        <div class="offline-tips">
+            <h4><i class="fas fa-lightbulb"></i> Offline Tips</h4>
+            <ul>
+                <li>Your progress is automatically saved locally</li>
+                <li>Bookmarked sections remain accessible</li>
+                <li>Changes will sync when you're back online</li>
+                <li>Install the app for better offline experience</li>
+            </ul>
+        </div>
+        
+        <div>
+            <button class="retry-button" onclick="checkConnection()" id="retry-button">
+                <i class="fas fa-sync-alt"></i> Check Connection
+            </button>
+            <button class="retry-button home-button" onclick="goHome()">
+                <i class="fas fa-home"></i> Go Home
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let isOnline = navigator.onLine;
+        let checkingConnection = false;
+        
+        // Initialize offline page
+        function initOfflinePage() {
+            updateConnectionStatus();
+            loadOfflineCapabilities();
+            setupEventListeners();
+            
+            // Check connection every 5 seconds
+            setInterval(checkConnection, 5000);
+        }
+        
+        function setupEventListeners() {
+            // Listen for online/offline events
+            window.addEventListener('online', () => {
+                isOnline = true;
+                updateConnectionStatus();
+                showOnlineMessage();
+            });
+            
+            window.addEventListener('offline', () => {
+                isOnline = false;
+                updateConnectionStatus();
+            });
+        }
+        
+        function updateConnectionStatus() {
+            const statusElement = document.getElementById('connection-status');
+            const indicatorElement = document.getElementById('status-indicator');
+            const textElement = document.getElementById('status-text');
+            const iconElement = document.getElementById('connection-icon');
+            const retryButton = document.getElementById('retry-button');
+            
+            if (isOnline) {
+                statusElement.classList.add('online');
+                indicatorElement.classList.add('online');
+                textElement.textContent = 'Connection restored!';
+                iconElement.className = 'fas fa-wifi';
+                retryButton.innerHTML = '<i class="fas fa-home"></i> Back to Training';
+                retryButton.onclick = goHome;
+            } else {
+                statusElement.classList.remove('online');
+                indicatorElement.classList.remove('online');
+                textElement.textContent = 'No internet connection';
+                iconElement.className = 'fas fa-wifi';
+                retryButton.innerHTML = '<i class="fas fa-sync-alt"></i> Check Connection';
+                retryButton.onclick = checkConnection;
+            }
+        }
+        
+        async function checkConnection() {
+            if (checkingConnection) return;
+            
+            checkingConnection = true;
+            const retryButton = document.getElementById('retry-button');
+            const originalContent = retryButton.innerHTML;
+            
+            retryButton.disabled = true;
+            retryButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+            
+            try {
+                // Try to fetch a small resource
+                const response = await fetch('/?offline-check=1', {
+                    method: 'HEAD',
+                    cache: 'no-cache'
+                });
+                
+                isOnline = response.ok;
+            } catch (error) {
+                isOnline = false;
+            }
+            
+            setTimeout(() => {
+                updateConnectionStatus();
+                retryButton.disabled = false;
+                checkingConnection = false;
+            }, 1000);
+        }
+        
+        function showOnlineMessage() {
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #28a745;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease-out;
+            `;
+            
+            message.innerHTML = `
+                <i class="fas fa-wifi"></i>
+                <strong>Back Online!</strong>
+                <br>Your content will sync automatically.
+            `;
+            
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOutRight 0.3s ease-in';
+                setTimeout(() => message.remove(), 300);
+            }, 4000);
+        }
+        
+        function loadOfflineCapabilities() {
+            // Check what content is available offline
+            if ('caches' in window) {
+                caches.keys().then(cacheNames => {
+                    if (cacheNames.length > 0) {
+                        // Update the available content list based on what's cached
+                        updateOfflineContentList();
+                    }
+                });
+            }
+        }
+        
+        function updateOfflineContentList() {
+            // This would be populated based on actual cached content
+            const contentList = document.getElementById('offline-content-list');
+            
+            // Add cached favorites if available
+            const favorites = localStorage.getItem('az-claude-favorites');
+            if (favorites) {
+                try {
+                    const favData = JSON.parse(favorites);
+                    if (favData.length > 0) {
+                        const favItem = document.createElement('li');
+                        favItem.innerHTML = '<i class="fas fa-star icon"></i> Your Bookmarked Content';
+                        contentList.appendChild(favItem);
+                    }
+                } catch (error) {
+                    console.error('Failed to load favorites:', error);
+                }
+            }
+        }
+        
+        function loadCachedContent(section) {
+            // Try to load cached content for the section
+            if ('caches' in window) {
+                caches.match(`/#${section}`).then(response => {
+                    if (response) {
+                        // Redirect to the cached content
+                        window.location.href = `/#${section}`;
+                    } else {
+                        showMessage('This content is not available offline. Please check your connection and try again.', 'warning');
+                    }
+                });
+            } else {
+                // Fallback: try to navigate anyway
+                window.location.href = `/#${section}`;
+            }
+        }
+        
+        function showFavorites() {
+            const favorites = localStorage.getItem('az-claude-favorites');
+            if (favorites) {
+                try {
+                    const favData = JSON.parse(favorites);
+                    if (favData.length > 0) {
+                        // Show favorites in a modal or navigate to favorites view
+                        showFavoritesModal(favData);
+                    } else {
+                        showMessage('No favorites saved yet.', 'info');
+                    }
+                } catch (error) {
+                    showMessage('Unable to load favorites.', 'error');
+                }
+            } else {
+                showMessage('No favorites saved yet.', 'info');
+            }
+        }
+        
+        function showFavoritesModal(favorites) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: white;
+                    border-radius: 12px;
+                    padding: 30px;
+                    max-width: 500px;
+                    width: 90%;
+                    max-height: 70vh;
+                    overflow-y: auto;
+                ">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3><i class="fas fa-star"></i> Your Favorites</h3>
+                        <button onclick="this.closest('.modal').remove()" style="
+                            background: none;
+                            border: none;
+                            font-size: 24px;
+                            cursor: pointer;
+                            color: #999;
+                        ">&times;</button>
+                    </div>
+                    <div>
+                        ${favorites.map(fav => `
+                            <div style="
+                                padding: 10px;
+                                border-bottom: 1px solid #eee;
+                                cursor: pointer;
+                            " onclick="window.location.href='${fav.url}'">
+                                <strong>${fav.title}</strong>
+                                <br><small style="color: #666;">${fav.url}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            modal.className = 'modal';
+            document.body.appendChild(modal);
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+        
+        function goHome() {
+            window.location.href = '/';
+        }
+        
+        function showMessage(text, type = 'info') {
+            const colors = {
+                info: '#17a2b8',
+                warning: '#ffc107',
+                error: '#dc3545',
+                success: '#28a745'
+            };
+            
+            const message = document.createElement('div');
+            message.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${colors[type]};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 300px;
+            `;
+            
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                message.style.opacity = '0';
+                message.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => message.remove(), 300);
+            }, 4000);
+        }
+        
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Initialize when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initOfflinePage);
+        } else {
+            initOfflinePage();
+        }
+    </script>
+</body>
+</html>
