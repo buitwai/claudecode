@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoZone Interactive Design System Demo</title>
+    <meta name="description" content="Interactive design system demonstration for Claude Code documentation">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Enhanced Interactive Styles -->
+    <link href="autozone-interactive-styles.css" rel="stylesheet">
+    
+    <!-- Demo-specific styles -->
+    <style>
+        body {
+            font-family: var(--font-family-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .demo-section {
+            margin-bottom: 3rem;
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .demo-title {
+            color: var(--color-gray-800);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .demo-description {
+            color: var(--color-gray-600);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .component-showcase {
+            background: var(--color-gray-50);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            border: 1px solid var(--color-gray-200);
+        }
+        
+        .hero-section {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, var(--az-red) 0%, var(--az-orange) 100%);
+            color: white;
+            border-radius: var(--radius-xl);
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .demo-container {
+                padding: 1rem;
+            }
+            
+            .demo-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Demo -->
+    <nav class="nav-enhanced">
+        <div class="demo-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 0;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div class="gradient-text" style="font-size: 1.5rem; font-weight: 800;">Claude Code</div>
+                    <div class="security-badge">Enterprise Ready</div>
+                </div>
+                <button class="mobile-menu-toggle" id="mobile-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="demo-container">
+        <!-- Hero Section -->
+        <div class="hero-section slide-in-up">
+            <h1 class="hero-title">AutoZone Interactive Design System</h1>
+            <p class="hero-subtitle">Fast, reliable, and professional UI components for Claude Code documentation</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary btn-lg btn-ripple">Get Started</button>
+                <button class="btn btn-secondary btn-lg">View Documentation</button>
+            </div>
+        </div>
+
+        <!-- Button System Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-mouse-pointer" style="color: var(--az-red); margin-right: 0.5rem;"></i>
+                Button System
+            </h2>
+            <p class="demo-description">
+                Professional button components with hover effects, loading states, and AutoZone-inspired styling.
+            </p>
+            
+            <div class="demo-grid">
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Primary Buttons</h4>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary">Default</button>
+                        <button class="btn btn-primary btn-sm">Small</button>
+                        <button class="btn btn-primary btn-lg">Large</button>
+                        <button class="btn btn-primary btn-loading">Loading</button>
+                    </div>
+                </div>
+                
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Secondary Buttons</h4>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-secondary">Default</button>
+                        <button class="btn btn-ghost">Ghost</button>
+                        <button class="btn btn-secondary" disabled>Disabled</button>
+                    </div>
+                </div>
+                
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Interactive Effects</h4>
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button class="btn btn-primary btn-ripple">Ripple Effect</button>
+                        <button class="btn btn-secondary interactive">Hover Transform</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card System Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-layer-group" style="color: var(--az-orange); margin-right: 0.5rem;"></i>
+                Interactive Cards
+            </h2>
+            <p class="demo-description">
+                Enhanced card components with hover effects, trust indicators, and professional styling.
+            </p>
+            
+            <div class="demo-grid">
+                <div class="card-enhanced card-clickable">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; color: var(--color-gray-800);">Security Setup</h3>
+                            <span class="security-badge">Required</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--color-gray-600); margin-bottom: 1rem;">Configure enterprise-grade security for Claude Code.</p>
+                        <div class="trust-indicator">Vertex AI Integration</div>
+                        <div class="trust-indicator">Enterprise Compliance</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Configure Now</button>
+                    </div>
+                </div>
+                
+                <div class="card-enhanced">
+                    <div class="card-header">
+                        <h3 style="margin: 0; color: var(--color-gray-800);">Quick Start Guide</h3>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--color-gray-600); margin-bottom: 1rem;">Get up and running with Claude Code in minutes.</p>
+                        <div class="progress-bar" style="margin-bottom: 1rem;">
+                            <div class="progress-fill" style="width: 75%;"></div>
+                        </div>
+                        <small style="color: var(--color-gray-500);">75% Complete</small>
+                    </div>
+                </div>
+                
+                <div class="card-enhanced">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; color: var(--color-gray-800);">Advanced Features</h3>
+                            <div class="enterprise-verified">
+                                <i class="fas fa-shield-check"></i>
+                                Enterprise
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p style="color: var(--color-gray-600);">Unlock powerful development capabilities with advanced Claude Code features.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-compass" style="color: var(--color-info); margin-right: 0.5rem;"></i>
+                Navigation System
+            </h2>
+            <p class="demo-description">
+                Responsive navigation with breadcrumbs, active states, and smooth interactions.
+            </p>
+            
+            <div class="component-showcase" style="margin-bottom: 1.5rem;">
+                <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Breadcrumb Navigation</h4>
+                <nav class="breadcrumb">
+                    <div class="breadcrumb-item">
+                        <a href="#" class="breadcrumb-link">Home</a>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <a href="#" class="breadcrumb-link">Documentation</a>
+                    </div>
+                    <div class="breadcrumb-item">
+                        <span style="color: var(--color-gray-800); font-weight: 500;">Interactive Design</span>
+                    </div>
+                </nav>
+            </div>
+            
+            <div class="component-showcase">
+                <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Side Navigation</h4>
+                <nav style="max-width: 250px;">
+                    <a href="#" class="nav-link-enhanced active">
+                        <i class="fas fa-home"></i>
+                        <span>Overview</span>
+                    </a>
+                    <a href="#" class="nav-link-enhanced">
+                        <i class="fas fa-cogs"></i>
+                        <span>Setup</span>
+                    </a>
+                    <a href="#" class="nav-link-enhanced">
+                        <i class="fas fa-book"></i>
+                        <span>Documentation</span>
+                    </a>
+                    <a href="#" class="nav-link-enhanced">
+                        <i class="fas fa-users"></i>
+                        <span>Team Features</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Tab System Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-folders" style="color: var(--color-success); margin-right: 0.5rem;"></i>
+                Tab System
+            </h2>
+            <p class="demo-description">
+                Smooth tab transitions with AutoZone-inspired styling and responsive behavior.
+            </p>
+            
+            <div class="tab-container">
+                <div class="tab-header">
+                    <button class="tab-button active" onclick="showTab(event, 'mac-tab')">
+                        <i class="fab fa-apple"></i>
+                        Mac Installation
+                    </button>
+                    <button class="tab-button" onclick="showTab(event, 'linux-tab')">
+                        <i class="fab fa-linux"></i>
+                        Linux Installation
+                    </button>
+                    <button class="tab-button" onclick="showTab(event, 'windows-tab')">
+                        <i class="fab fa-windows"></i>
+                        Windows Installation
+                    </button>
+                </div>
+                
+                <div id="mac-tab" class="tab-content active">
+                    <h3 style="color: var(--color-gray-800); margin-bottom: 1rem;">Mac Installation</h3>
+                    <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+                        Install Claude Code on macOS using npm and configure your environment.
+                    </p>
+                    <div style="background: var(--color-gray-800); color: var(--color-gray-200); padding: 1rem; border-radius: var(--radius-md); font-family: var(--font-family-mono);">
+                        npm install -g @anthropic-ai/claude-code<br>
+                        claude --version
+                    </div>
+                </div>
+                
+                <div id="linux-tab" class="tab-content">
+                    <h3 style="color: var(--color-gray-800); margin-bottom: 1rem;">Linux Installation</h3>
+                    <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+                        Set up Claude Code on your Linux distribution with package managers.
+                    </p>
+                    <div style="background: var(--color-gray-800); color: var(--color-gray-200); padding: 1rem; border-radius: var(--radius-md); font-family: var(--font-family-mono);">
+                        curl -fsSL https://claude.ai/install.sh | sh<br>
+                        claude --help
+                    </div>
+                </div>
+                
+                <div id="windows-tab" class="tab-content">
+                    <h3 style="color: var(--color-gray-800); margin-bottom: 1rem;">Windows Installation</h3>
+                    <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+                        Get started with Claude Code on Windows using PowerShell or WSL.
+                    </p>
+                    <div style="background: var(--color-gray-800); color: var(--color-gray-200); padding: 1rem; border-radius: var(--radius-md); font-family: var(--font-family-mono);">
+                        npm install -g @anthropic-ai/claude-code<br>
+                        claude.exe --version
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accordion Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-list" style="color: var(--color-warning); margin-right: 0.5rem;"></i>
+                Accordion System
+            </h2>
+            <p class="demo-description">
+                Expandable content sections with smooth animations and AutoZone styling.
+            </p>
+            
+            <div class="accordion-enhanced">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Getting Started with Claude Code</span>
+                        <i class="fas fa-chevron-down accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+                                Learn the fundamentals of Claude Code and set up your development environment.
+                            </p>
+                            <ul style="color: var(--color-gray-600); margin-left: 1rem;">
+                                <li>Install Claude Code CLI</li>
+                                <li>Configure authentication</li>
+                                <li>Set up your first project</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Security and Enterprise Features</span>
+                        <i class="fas fa-chevron-down accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+                                Enterprise-grade security features for production environments.
+                            </p>
+                            <div class="trust-indicator">Vertex AI Integration</div>
+                            <div class="trust-indicator">SOC 2 Compliance</div>
+                            <div class="trust-indicator">End-to-end Encryption</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>Advanced Development Workflows</span>
+                        <i class="fas fa-chevron-down accordion-icon"></i>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-body">
+                            <p style="color: var(--color-gray-600);">
+                                Optimize your development process with advanced Claude Code features and integrations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-edit" style="color: var(--az-red); margin-right: 0.5rem;"></i>
+                Form Components
+            </h2>
+            <p class="demo-description">
+                Professional form inputs with validation states and search functionality.
+            </p>
+            
+            <div class="demo-grid">
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Search Component</h4>
+                    <div class="search-container">
+                        <input type="search" class="search-input" placeholder="Search documentation...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Form Inputs</h4>
+                    <div class="form-group">
+                        <label class="form-label">Project Name</label>
+                        <input type="text" class="form-input" placeholder="Enter project name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">API Endpoint</label>
+                        <input type="url" class="form-input" placeholder="https://api.example.com" value="https://valid-url.com">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading States Demo -->
+        <div class="demo-section fade-in">
+            <h2 class="demo-title">
+                <i class="fas fa-spinner" style="color: var(--color-info); margin-right: 0.5rem;"></i>
+                Loading & Progress
+            </h2>
+            <p class="demo-description">
+                Visual feedback components for loading states and progress tracking.
+            </p>
+            
+            <div class="demo-grid">
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Skeleton Loading</h4>
+                    <div class="loading-skeleton" style="margin-bottom: 0.5rem;"></div>
+                    <div class="loading-skeleton" style="width: 80%; margin-bottom: 0.5rem;"></div>
+                    <div class="loading-skeleton" style="width: 60%;"></div>
+                </div>
+                
+                <div class="component-showcase">
+                    <h4 style="margin-bottom: 1rem; color: var(--color-gray-700);">Progress Indicators</h4>
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.875rem; color: var(--color-gray-600);">Installation Progress</span>
+                            <span style="font-size: 0.875rem; color: var(--az-red); font-weight: 600;">68%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 68%;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="font-size: 0.875rem; color: var(--color-gray-600);">Setup Complete</span>
+                            <span style="font-size: 0.875rem; color: var(--color-success); font-weight: 600;">100%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Thumb Zone -->
+    <div class="thumb-zone">
+        <button class="btn btn-primary btn-sm">
+            <i class="fas fa-home"></i>
+        </button>
+        <button class="btn btn-ghost btn-sm">
+            <i class="fas fa-search"></i>
+        </button>
+        <button class="btn btn-ghost btn-sm">
+            <i class="fas fa-cog"></i>
+        </button>
+    </div>
+
+    <script>
+        // Tab System
+        function showTab(event, tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Activate selected tab button
+            event.target.classList.add('active');
+        }
+
+        // Accordion System
+        function toggleAccordion(header) {
+            const item = header.closest('.accordion-item');
+            const isOpen = item.classList.contains('open');
+            
+            // Close all other accordion items
+            document.querySelectorAll('.accordion-item').forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('open');
+                }
+            });
+            
+            // Toggle current item
+            if (isOpen) {
+                item.classList.remove('open');
+            } else {
+                item.classList.add('open');
+            }
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('mobile-toggle').addEventListener('click', function() {
+            // This would toggle mobile navigation in a real implementation
+            console.log('Mobile menu toggled');
+        });
+
+        // Add ripple effect to buttons
+        document.querySelectorAll('.btn-ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple');
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+
+        // Simulate loading button
+        document.querySelectorAll('.btn-loading').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.add('btn-loading');
+                setTimeout(() => {
+                    this.classList.remove('btn-loading');
+                }, 3000);
+            });
+        });
+
+        // Add stagger animation to grid items
+        function addStaggerAnimation() {
+            const grids = document.querySelectorAll('.demo-grid');
+            grids.forEach(grid => {
+                grid.classList.add('stagger-children');
+            });
+        }
+
+        // Initialize animations when page loads
+        window.addEventListener('load', function() {
+            addStaggerAnimation();
+            
+            // Add intersection observer for fade-in animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = '0s';
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            });
+            
+            document.querySelectorAll('.demo-section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Add CSS for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .btn-ripple {
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
